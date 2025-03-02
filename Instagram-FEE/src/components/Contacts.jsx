@@ -8,13 +8,15 @@ function Contacts(){
           follow: "abhinav_jindal",
         },
       ];
+
+    let uName = localStorage.getItem("cUser");
     return(
         <div className={styles.contacts}>
             <div className={styles.username}>
                 <img src="/Images/user.png" alt="" />
                 <div className={styles["user-account"]}>
-                    <p>_ppratham_kumar</p>
-                    <p className={styles["user-name"]}>Pratham Kumar</p>
+                    <p>User</p>
+                    <p className={styles["user-name"]}>{uName}</p>
                 </div>
                 <a href="#" onClick="toggleLogin()">Switch</a>
                 <div className={styles["modal-background"]} id="modalBackground"></div>

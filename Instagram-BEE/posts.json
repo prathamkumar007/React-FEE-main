@@ -1,16 +1,6 @@
 {
-  "gopi12": [
-    {
-      "dp": "/Images/leodp.jpg",
-      "image": "/Images/leomessi.jpg",
-      "caption": "hi",
-      "title": "Leo Messi"
-    },
-    {
-      "dp": "/Images/viratDp.jpg",
-      "image": "/Images/viratkohli.jpg",
-      "caption": "hello",
-      "title": "Virat Kohli"
-    }
-  ]
+  "1": "/Images/leomessi.jpg",
+  "2": "/Images/cristiano.jpg",
+  "3": "/Images/viratkohli.jpg",
+  "4": "/Images/flower1.jpeg"
 }

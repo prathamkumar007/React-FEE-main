@@ -18,6 +18,7 @@ const readUsers = async () => {
     return [];
   }
 };
+
 const readPost =async()=>{
   try{
     const data = await fs.readFile(post_file,"utf-8");
@@ -60,7 +61,7 @@ app.post("/auth/signup", async (req, res) => {
 
 // LOGIN ROUTE
 app.post("/auth/login", async (req, res) => {
-  const { email, password } = req.body;
+  const {email, password } = req.body;
 
   const users = await readUsers();
   const user = users.find((u) => u.email === email);
@@ -90,9 +91,25 @@ app.post("/post", async (req, res) => {
   res.status(200).json({ message: "Post added successfully!" });
 });
 
-app.get("/post",async(req,res)=>{
-    const data = await readPost();
-    res.json(data);
+// app.get("/post",async(req,res)=>{
+//     const data = await readPost();
+//     res.json(data);
+// })
+
+app.get("/post/:number", async (req, res) => {
+  const number = req.params.number;
+  const data = await readPost();
+  
+  if (data[number]) {
+    res.send(data[number]);
+  } else {
+    res.status(404).send("Post not found");
+  }
+});
+app.get("/users",async(req,res)=>{
+  const data = await readUsers();
+  res.json(data);
 })
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

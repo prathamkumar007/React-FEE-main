@@ -1,13 +1,15 @@
 import styles from "./UserProfile.module.css";
 
 function UserProfile() {
+  let cUser = localStorage.getItem("cUser");
+  
   return (
     <div className={styles["users-profile-child"]}>
       <div className={styles["profile-pic"]}>
         <img src="/Images/user.png" alt="" />
         <div className={`${styles.part3} ${styles.res}`}>
           <div className={styles.Name}>
-            <h3>Pratham Kumar</h3>
+            <h3>{cUser}</h3>
           </div>
           <div className={styles["threads-account"]}>
             <button>
@@ -26,7 +28,7 @@ function UserProfile() {
       <div className={styles["all-details"]}>
         <div className={styles.part1}>
           <div className={`${styles.username} ${styles["re-username"]}`}>
-            <p>_ppratham_kumar</p>
+            <p>{cUser}</p>
           </div>
           <div className={styles.edit}>
             <button className={styles["edit-btn"]}>Edit Profile</button>
@@ -50,9 +52,10 @@ function UserProfile() {
           </div>
         </div>
 
+
         <div className={`${styles.part1} ${styles["res-part1"]}`}>
           <div className={styles.username}>
-            <p>_ppratham_kumar</p>
+            <p>{cUser}</p>
             <div>
               <img src="/Images/black-settings-button.png" alt="" />
             </div>
@@ -86,7 +89,7 @@ function UserProfile() {
         </div>
         <div className={styles.part3}>
           <div className={styles.Name}>
-            <h3>Pratham Kumar</h3>
+            <h3>{cUser}</h3>
           </div>
           <div className={styles["threads-account"]}>
             <button className={styles["thread-btn"]}>
@@ -96,7 +99,7 @@ function UserProfile() {
                 className={`${styles["thread-img"]} ${styles["light-set"]}`}
               />
               <img src="/Images/darkThreads.png" alt="" className={styles["dark-set"]} />
-              <div className={styles["thread-p"]}>_ppratham_kumar</div>
+              <div className={styles["thread-p"]}>{cUser}</div>
             </button>
           </div>
         </div>

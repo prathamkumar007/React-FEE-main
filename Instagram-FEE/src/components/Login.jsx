@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Login.css";
-import { useNavigate } from "react-router";
+import { resolvePath, useNavigate } from "react-router";
 import axios from 'axios';
 
-function Login() {
+function Login({setUser}) {
   const [phoneImages, setPhoneImages] = useState({
     back: "",
     front: "",
@@ -13,6 +13,8 @@ function Login() {
   const [error, setError] = useState(null);
   const UNSPLASH_API_KEY = "E0ALOBG92sDBhOmSqp6n0SO4W35_vheYws0pOPB-Peg";
   const UNSPLASH_URL = `https://api.unsplash.com/photos/random?client_id=${UNSPLASH_API_KEY}&count=2`;
+
+  let currentUser = "";
 
   const fetchRandomImages = async () => {
     try {
@@ -42,9 +44,11 @@ function Login() {
     navigate("/signup");
   };
 
-const loginUser = async (email, password) => {
+const loginUser = async ( email, password) => {
   try {
     console.log(email,password);
+    currentUser = email;
+    localStorage.setItem("cUser", currentUser);
     const response = await axios.post("http://localhost:4000/auth/login", {
       email,
       password,
@@ -216,4 +220,4 @@ const handleSubmit = (e) => {
     </div>
   );
 }
-export default Login;
+export default Login ;

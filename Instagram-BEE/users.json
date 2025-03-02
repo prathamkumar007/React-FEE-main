@@ -3,101 +3,132 @@
     "id": 1740904812952,
     "username": "fdfiofj",
     "email": "prathamkumar271105@gmail.com",
+    "myPost": [],
     "password": "$2b$10$Zi42v2gvZnjxOvKJUAZkEOhr7IkY5txxyB/8u4c5xBRhy20a84RoW"
   },
   {
     "id": 1740905073345,
     "username": "pratham0707",
     "email": "pratha5@gmail.com",
+    "myPost": [],
     "password": "$2b$10$dVsUAPO4XSJDT0Kg.pe6vemIqk4Y8MpuhtC9RHwGgWXTPBD6spTmG"
   },
   {
     "id": 1740905207341,
     "username": "pratham0707",
     "email": "nitish0589.be23@chitkara.edu.in",
+    "myPost": [],
     "password": "$2b$10$hdyXZRbjQxOXCXfe908dp.AABYIw6Lx4Lu.t2sJTICxJ5EixSOE5O"
   },
   {
     "id": 1740905276115,
     "username": "pratham0707",
     "email": "ksks@fk.com",
+    "myPost": [],
     "password": "$2b$10$rfzPXnpx/L6OI9/pZTWz/ua6TudOy1JD6/j6Yg/Zyn0ApqugPU162"
   },
   {
     "id": 1740905400324,
     "username": "fdfiofj",
     "email": "djskdj@fenfm",
+    "myPost": [],
     "password": "$2b$10$MGFMgMCQ7MTCw39dRxCScO11Ze5o3ruXuCGeOGZGjyXgBLamG.Mau"
   },
   {
     "id": 1740905439657,
     "username": "pratham0707",
     "email": "dkowk@jfenjnd.com",
+    "myPost": [],
     "password": "$2b$10$plBcgSMujdWqL5HjxZ1nEuNh84SLHDQN9lXS/.DVzDhu0gBfTx1tq"
   },
   {
     "id": 1740906102552,
     "username": "pratham0707",
     "email": "ksdsk@jdfnkm",
+    "myPost": [],
     "password": "$2b$10$8S1R.4/WKhQZl/VXIhqDX.MQ5XKm09aCKQwaTFdwthR040lcHxNRm"
   },
   {
     "id": 1740906182542,
     "username": "pratham0707",
     "email": "dnmk@fnfm",
+    "myPost": [],
     "password": "$2b$10$7E2meeUGsBiahpFoRiBGFe6uoooamoFinc016tX1gbFFSLzWwy5wa"
   },
   {
     "id": 31223131,
     "username": "12",
     "email": "pathi@12",
+    "myPost": [],
     "password": "12"
   },
   {
     "id": 12,
     "username": "gop12",
     "email": "gopesh@12",
+    "myPost": [
+      1,
+      3,
+      2,
+      4
+    ],
     "password": "123"
   },
   {
     "id": 12,
     "username": "gop12",
     "email": "gopesh@122",
+    "myPost": [],
     "password": "123"
   },
   {
     "username": "mayur",
     "email": "mayur@12",
+    "myPost": [
+      2,
+      4
+    ],
     "password": "123"
   },
   {
     "username": "dijifj",
     "email": "kmdmk@1",
+    "myPost": [],
     "password": "456"
   },
   {
     "username": "ff",
     "email": "keko@12",
+    "myPost": [],
     "password": "12"
   },
   {
     "username": "pratham",
     "email": "pratham@12345",
+    "myPost": [],
     "password": "1234"
   },
   {
     "username": "okdo",
     "email": "pratham@123456",
+    "myPost": [],
     "password": "456"
   },
   {
     "username": "ass",
     "email": "ass@123",
+    "myPost": [],
     "password": "123"
   },
   {
     "username": "j",
     "email": "pratham@1234567",
+    "myPost": [],
     "password": "4567"
+  },
+  {
+    "username": "Lodu Nitish",
+    "email": "loduNitish@12",
+    "password": "123"
   }
 ]

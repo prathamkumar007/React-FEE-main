@@ -1,33 +1,76 @@
-import styles from './ProfilePost.module.css'
+import { useEffect, useState } from "react";
+import styles from "./ProfilePost.module.css";
 
 function ProfilePost() {
+  const [imageUrls, setImageUrls] = useState([]);
+  let cUser = localStorage.getItem("cUser");
+
+  useEffect(() => {
+    async function fetchUserPosts() {
+      try {
+        const response = await fetch("http://localhost:4000/users");
+        const data = await response.json();
+        
+        const user = data.find((user) => user.email === cUser);
+        if (user) {
+          const postIds = user.myPost.flat(); // Flatten nested array
+          fetchPostImages(postIds);
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    }
+
+    async function fetchPostImages(postIds) {
+      try {
+        const urls = await Promise.all(
+          postIds.map(async (id) => {
+            const res = await fetch(`http://localhost:4000/post/${id}`);
+            const data = await res.text(); // API returns a string
+            console.log(data)
+            return data; // Directly use the string response
+          })
+        );
+        setImageUrls(urls);
+      } catch (error) {
+        console.error("Error fetching post images:", error);
+      }
+    }
+
+    fetchUserPosts();
+  }, [cUser]);
+
   return (
-      <div className={styles.share}>
-        <hr />
-        <div className={styles["share-1"]}>
-          <div className={styles.Posts}>
-            <img src="/Images/profile.png" alt="" className={styles["light-set"]} />
-            <img src="/Images/darkProfile.png" alt="" className={styles["dark-set"]} />
-            <p className={styles["share-p"]}>POSTS</p>
-          </div>
-
-          <div className={styles.Posts}>
-            <img src="/Images/save-instagram.png" alt="" className={styles["light-set"]} />
-            <img src="/Images/darkSave.png" alt="" className={styles["dark-set"]} />
-            <p className={styles["share-p"]}>SAVED</p>
-          </div>
-
-          <div className={styles.Posts}>
-            <img src="/Images/comment.png" alt="" className={styles["light-set"]} />
-            <img src="/Images/darkTag.png" alt="" className={styles["dark-set"]} />
-            <p className={styles["share-p"]}>TAGGED</p>
-          </div>
+    <div className={styles.share}>
+      <hr />
+      <div className={styles["share-1"]}>
+        <div className={styles.Posts}>
+          <img src="/Images/profile.png" alt="" className={styles["light-set"]} />
+          <img src="/Images/darkProfile.png" alt="" className={styles["dark-set"]} />
+          <p className={styles["share-p"]}>POSTS</p>
         </div>
-        <div className={styles["share-2"]}>
-          <img src="/Images/post1.jpg" alt="" />
-          <img src="/Images/post2.jpg" alt="" />
+
+        <div className={styles.Posts}>
+          <img src="/Images/save-instagram.png" alt="" className={styles["light-set"]} />
+          <img src="/Images/darkSave.png" alt="" className={styles["dark-set"]} />
+          <p className={styles["share-p"]}>SAVED</p>
+        </div>
+
+        <div className={styles.Posts}>
+          <img src="/Images/comment.png" alt="" className={styles["light-set"]} />
+          <img src="/Images/darkTag.png" alt="" className={styles["dark-set"]} />
+          <p className={styles["share-p"]}>TAGGED</p>
         </div>
       </div>
+
+      {/* Render dynamic images */}
+      <div className={styles["share-2"]}>
+        {imageUrls.map((url, index) => (
+          <img key={index} src={url} alt={`Post ${index}`} />
+        ))}
+      </div>
+    </div>
   );
 }
+
 export default ProfilePost;
