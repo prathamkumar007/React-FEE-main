@@ -79,5 +79,25 @@
     "username": "ff",
     "email": "keko@12",
     "password": "12"
+  },
+  {
+    "username": "pratham",
+    "email": "pratham@12345",
+    "password": "1234"
+  },
+  {
+    "username": "okdo",
+    "email": "pratham@123456",
+    "password": "456"
+  },
+  {
+    "username": "ass",
+    "email": "ass@123",
+    "password": "123"
+  },
+  {
+    "username": "j",
+    "email": "pratham@1234567",
+    "password": "4567"
   }
 ]

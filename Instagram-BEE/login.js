@@ -1,11 +1,11 @@
 const express = require("express");
 const fs = require("fs/promises");
 const cors = require("cors");
-const bcrypt = require("bcryptjs");
 
 const app = express();
-const PORT = 5000;
+const PORT = 4000;
 const USERS_FILE = "./users.json";
+const post_file = "./posts.json";
 const pathi = [1,2,3,4];
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" }));
@@ -18,10 +18,23 @@ const readUsers = async () => {
     return [];
   }
 };
+const readPost =async()=>{
+  try{
+    const data = await fs.readFile(post_file,"utf-8");
+    return JSON.parse(data);
+  }
+  catch(err){
+    return [];
+  }
+}
+const writePost =async(posts)=>{
+ await fs.writeFile(post_file,JSON.stringify(posts,null,2));
+}
 
 const writeUsers = async (users) => {
   await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
 };
+
 app.get("/auth/sign",async(req,res)=>{
     res.json(pathi)
 })
@@ -63,5 +76,23 @@ app.post("/auth/login", async (req, res) => {
 
   res.json({ message: "Login successful" });
 });
+
+app.post("/post", async (req, res) => {
+  const { dp, image, caption, title, username } = req.body;
+  let posts = await readPost();
+  if (!posts[username]) {
+      posts[username] = [];
+  }
+  const newPost = { dp, image, caption, title };
+  posts[username].push(newPost);
+  await writePost(posts);
+
+  res.status(200).json({ message: "Post added successfully!" });
+});
+
+app.get("/post",async(req,res)=>{
+    const data = await readPost();
+    res.json(data);
+})
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

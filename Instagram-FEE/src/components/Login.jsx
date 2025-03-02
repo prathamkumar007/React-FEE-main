@@ -31,7 +31,7 @@ function Login() {
     fetchRandomImages();
     const interval = setInterval(() => {
       fetchRandomImages();
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);
@@ -45,7 +45,7 @@ function Login() {
 const loginUser = async (email, password) => {
   try {
     console.log(email,password);
-    const response = await axios.post("http://localhost:5000/auth/login", {
+    const response = await axios.post("http://localhost:4000/auth/login", {
       email,
       password,
     });
