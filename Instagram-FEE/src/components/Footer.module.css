@@ -1,0 +1,41 @@
+.footer{
+    margin-left: 5%;
+    width: 90%;
+    padding: 1vh;
+    margin-top: 3vh;
+    line-height: 2;
+}
+.footer p{
+    font-size: 0.9vw;
+}
+.about{
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    color: rgb(115,115,115);
+    font-weight: 400;
+    cursor: pointer;
+}
+.languages{
+    display: flex;
+    justify-content: center;
+    color: rgb(115,115,115);
+    font-weight: 400;
+}
+
+select{
+    width: 5vw;
+    border: none;
+    font-family: Helvetica, sans-serif;
+    color: rgb(115,115,115);
+    font-weight: 400;
+    
+}
+select option{
+    font-size: smaller;
+    color: rgb(115,115,115);
+    font-weight: 400;
+}
+.about p:hover{
+    text-decoration: underline;
+}

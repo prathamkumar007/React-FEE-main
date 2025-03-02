@@ -1,0 +1,42 @@
+.insta-story{
+    display: flex;
+    width: 46vw;
+    justify-content: space-evenly;
+    gap: 15px;
+    padding-top: 2vh;
+    scrollbar-width: none;
+    overflow-x: auto;
+    align-items: end;
+    margin-top: 3vh;
+}
+.insta-story::-webkit-scrollbar {
+    display: none;
+}
+.all-story{
+    display: flex;
+    flex-direction: column;
+}
+.user-story{
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-align: center;
+}
+.story1{
+    width: 4.5vw;
+    height: 9vh;
+    border-radius: 100%;
+    object-fit: cover;
+}
+.story1 img{
+    object-fit: cover;
+    border: 3px solid white;
+}
+.back{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4.8vw;
+    height: 9.6vh;
+    background: linear-gradient(240deg, rgb(249, 1, 42),rgb(247, 10, 247), rgb(252, 12, 52), yellow, orange );
+    border-radius: 50%;
+}

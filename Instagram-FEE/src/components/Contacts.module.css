@@ -1,0 +1,185 @@
+.username{
+    display: flex;
+}
+.user-account{
+    margin-left: 1vw;
+}
+.user-account .user-name{
+    color: rgb(115, 115, 115);
+}
+.suggest{
+    margin-top: 5vh;
+    display: flex;
+}
+.suggest .suggFor{
+    color: rgb(115, 115, 115);
+    font-weight: 600;
+}
+.see{
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: 8.8vw;
+}
+.suggestion-1{
+    margin-top: 2vh;
+    display: flex;
+}
+.suggestion-1 a{
+    margin-left: 5vw;
+    font-size: 12px;
+}
+ .suggestion-1 .following{
+    color: rgb(38, 38, 38);
+}
+.suggestion-1 img{
+    border-radius: 100%;
+    width: 3vw;
+    height: 6vh;
+}
+.accounts{
+    margin-left: 1vw;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.followed{
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: rgb(115, 115, 115);
+}
+.contacts{
+    width: 25%;
+    height: 100%;
+    margin-top: 6vh;
+    position: absolute;
+    top: 5px;
+    right: 20px;
+}
+.contacts img{
+    width: 3vw;
+    object-fit: cover;
+}
+.contacts a{
+    text-decoration: none;
+    color: #0095F6;
+    font-size: 0.9rem;
+    margin-left: 5.3vw;
+    margin-top: 1.5vh;
+}
+.contacts a:hover{
+    color: rgb(0, 55, 107);
+}
+.about{
+    margin-top: 5vh;
+    width: 17vw;
+}
+.about-topics{
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.7rem;
+    color: rgb(199, 199, 199);
+    gap: 10px;
+}
+.about-topics :hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+.copy{
+    font-size: 0.8rem;
+    text-transform: uppercase   ;
+    color: rgb(199, 199, 199);
+    margin-top: 3vh;
+}
+.login-modal {
+    width: 28%;
+    height: 56vh;
+    border-radius: 20px;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+.xIcon{
+    float: right;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.login-modal .inputs{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.login-modal p{
+    font-family: 'Billabong';
+    font-weight: lighter;
+    font-size: 2.5vw;
+    text-align: center;
+    margin-top: 8vh;
+}
+.login-modal #username{
+    width: 70%;
+    padding: 10px;
+    border-radius: 3px;
+    margin-top: 6vh;
+    background-color: #f5f5f5;
+    border: 1px solid grey;
+}
+.login-modal #password{
+    width: 70%;
+    padding: 10px;
+    border-radius: 3px;
+    background-color: #f5f5f5;
+    border: 1px solid grey;
+}
+
+.login-modal .checking{
+    margin-top: 2vh;
+    display: flex;
+    gap: 3px;
+}
+.login-modal #checkbox{
+    margin-left: 3.8vw;
+}
+.login-modal span{
+    margin-left: 2px;
+    font-size: 0.8rem;
+}
+.login-modal .logfor{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login-modal .loginbutton{
+    width: 70%;
+    padding: 10px;
+    margin-top: 3vh;
+    border: 1px solid ;
+    border-radius: 10px;
+    background-color: rgb(59, 191, 244);
+    color: white;
+    font-weight: 600;   
+    cursor: pointer;
+}
+.login-modal a{
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: rgb(0, 55, 107);
+    margin-top: 3vh;
+    margin-right: 5vw;
+}
+.modal-background {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}

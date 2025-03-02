@@ -1,0 +1,83 @@
+.posts{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 8vh;
+}
+.post1 {
+    max-width: 600px;
+    margin-bottom: 5vh;
+    border: 1px solid black;
+    border-radius: 8px;
+    margin-right: 10%;
+}
+.name {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.name .tick {
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+}
+
+.name .indiact {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.left{
+    padding-left: 10vw;
+}
+.likecommentshare {
+    display: flex;
+    gap: 13px;
+}
+.like img{
+    width: 24px;
+    height: 24px;
+}
+.like, .comment, .share, .save {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 0px 1vh;
+    transition: transform 0.2s;
+}
+.like p, .comment p, .share p{
+    font-size: 0.9rem;
+    margin-left: 4px;
+}
+
+.img-container{
+    width: 100%;
+    max-width: 600px;
+    margin-top: 2vh;
+    border-radius: 5px;
+    overflow: hidden; 
+}
+.img-container img{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.champions {
+    padding: 0 12px 12px;
+}
+.dark-img{
+    width: 24px;
+    display: none;
+}
+.dark-like-icon{
+    display: none;
+    color: white;
+}

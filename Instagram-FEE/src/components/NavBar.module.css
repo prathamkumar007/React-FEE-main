@@ -1,0 +1,80 @@
+@font-face{
+    font-family: billabong;
+    src: url(/InstagramFont/Instagram.ttf);
+}
+.nav-logo{
+    font-family: 'billabong';
+    margin-bottom: 2vw;
+}
+.navbar{
+    line-height: 1.5;
+    width: 15%;
+    height: 100%;
+    border-right: 1px solid rgba(128, 128, 128, 0.188);
+    padding: 2vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+.navbar img{
+    width: 12%;
+    height: 12%;
+}
+.nav-logo img{
+    display: none;
+}
+.namelogo{
+    font-weight: 100;
+    font-size: 1.9vw;
+}
+.nav-topics{
+    padding-bottom: 2vw;
+}
+.topics{
+    display: flex;
+    margin-bottom: 1.7vw;
+    gap: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+.links{
+    text-decoration: none;
+    color: black;
+    font-weight: normal;
+}
+.more-settings{
+    line-height: 55px;
+    font-size: 2vh;
+    font-weight: 400;
+    width: 40vh;
+    height: auto;
+    display: none;
+    top: 20%;
+    left: 1%;
+    position: fixed;
+    z-index: 500;
+    background-color: white;
+    box-shadow: 1px 1px 10px 2px rgb(0, 0, 0, 0.5);
+    border-radius: 1vh;
+}
+.more-settings.show{
+    display: block;
+}
+.more-settings img{
+    width: 1.1vw;
+    height: 2.2vh;
+}
+.more-set{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-left: 1vw;
+    cursor: pointer;
+    padding-top: 5px;
+}
+.dark-icon{
+    display: none;
+}
+.dark-set{
+    display: none;
+}

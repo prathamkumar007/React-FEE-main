@@ -1,0 +1,84 @@
+.users-profile-child{
+    display: flex;
+    margin-left: 13vw;
+}
+.users-profile-child img{
+    width: 13vw;
+}
+.all-details{
+    margin-left: 7vw;
+}
+.username{
+    margin-top: 0.3vw;
+}
+.part1{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1vw;
+}
+.res-part1{
+    display: none;
+}
+button{
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+    background-color: #EFEFEF;
+    color: #000000;
+    padding: 0.5vw 1vw;
+    cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.thread-btn{
+    display: flex;
+    gap: 5px;
+}
+.res{
+    display: none;
+}
+.threads-account img{
+    width: 1vw;
+    height: 1vw;
+}
+.part1 img{
+    width: 2vw;
+    height: 2vw;
+}
+.part2{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 2vw;
+}
+
+.part3{
+    line-height: 1.5;
+}
+span{
+    font-weight: 500;
+}
+.new{
+    width: 100%;
+}
+.new img{
+    width: 6vw;
+    height: 6vw;
+    margin-top: 5vw;
+}
+.new p{
+    margin-left: 2vw;
+    color: black;
+    margin-bottom: 3vw;
+}
+hr{
+    width: 80%;
+    margin: auto;
+}
+a{
+    text-decoration: none;
+    color: rgb(0,55,107);
+    font-weight: 600;
+}
+.dark-set{
+    display: none;
+}

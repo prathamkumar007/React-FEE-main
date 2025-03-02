@@ -1,0 +1,236 @@
+@font-face {
+    font-family: billabong;
+    src: url(/InstagramFont/Instagram.ttf);
+}
+
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #fafafa;
+}
+
+.signup-container p {
+    color: #737373;
+    margin: 0;
+    font-size: 14px;
+}
+
+.signup-box {
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    padding: 20px 40px;
+    margin-bottom: 10px;
+    max-width: 350px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.instagram-logo {
+    font-family: 'billabong';
+    text-align: center;
+    font-size: 40px;
+    font-weight: 100;
+    margin: 22px auto 12px;
+}
+
+.signup-message {
+    color: #737373;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 20px;
+    margin: 0 40px 10px;
+    text-align: center;
+}
+
+.facebook-button {
+    background-color: #0095f6;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 7px 16px;
+    width: 100%;
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.facebook-button:hover {
+    background-color: #1877f2;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 10px 0 18px;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+}
+
+.divider span {
+    color: #737373;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 18px;
+    text-transform: uppercase;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.signup-form input {
+    background-color: #fafafa;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+    font-size: 12px;
+    padding: 9px 8px;
+    width: 100%;
+}
+
+.signup-form input::placeholder {
+    color: #737373;
+}
+
+.signup-form input:focus {
+    border-color: #a8a8a8;
+    outline: none;
+}
+
+.terms-message,
+.policy-message {
+    color: #737373;
+    font-size: 12px;
+    margin: 10px 0;
+    line-height: 16px;
+    text-align: center;
+}
+
+.terms-message a,
+.policy-message a {
+    color: #00376B;
+    font-weight: 600;
+    text-decoration: none;
+}
+.signup-form p{
+    margin-top: 10px;
+    font-size: 12px;
+}
+.signup-button {
+    background-color: #0095f6;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 7px 16px;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.signup-button:hover {
+    background-color: #1877f2;
+}
+
+.login-box {
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    padding: 10px;
+    margin-bottom: 10px;
+    max-width: 350px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.login-box p {
+    color: #262626;
+    font-size: 14px;
+    margin: 15px;
+}
+
+.login-box a {
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.get-app {
+    text-align: center;
+}
+
+.get-app p {
+    color: #262626;
+    font-size: 14px;
+    margin: 10px 0 20px;
+}
+
+.app-download-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.app-download-buttons img {
+    height: 40px;
+}
+
+.footer {
+    padding: 24px 16px;
+}
+  
+.footer nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    list-style: none;
+    margin-bottom: 16px;
+    padding: 0;
+}
+  
+.footer a {
+    font-size: 12px;
+    text-decoration: none;
+}
+  
+.footer-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+}
+  
+.footer-bottom select {
+    border: none;
+    background: none;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .signup-box,
+    .login-box {
+        padding: 20px;
+        margin: 0 10px;
+    }
+
+    .app-download-buttons img {
+        height: 35px;
+    }
+}
