@@ -25,7 +25,7 @@ const writeUsers = async (users) => {
 
 // SIGNUP ROUTE
 app.post("/auth/signup", async (req, res) => {
-  const { username, email, password ,id } = req.body;
+  const { username, email, password } = req.body;
   if (!username || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
@@ -35,7 +35,15 @@ app.post("/auth/signup", async (req, res) => {
     return res.status(400).json({ message: "Email already exists" });
   }
   
-  const newUser = { id, username, email, password };
+  const newId = (users.length + 1).toString();
+  const newUser = {
+    id: newId,
+    username,
+    email,
+    myPost: [],
+    myReels: [],
+    password
+  };
   users.push(newUser);
   await writeUsers(users);
   
@@ -64,6 +72,15 @@ app.post("/auth/login", async (req, res) => {
 app.get("/users",async(req,res)=>{
   const data = await readUsers();
   res.json(data);
+})
+
+//For Delete
+app.delete("/user/:id", async(req, res) => {
+  const id = req.params.id;
+  const users = await readUsers();
+  const newUsers = users.filter((user) => user.id !== id);
+  await writeUsers(newUsers);
+  res.json({ message: "User deleted successfully" });
 })
 
 // For Posts

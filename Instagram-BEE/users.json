@@ -73,7 +73,11 @@
       4,
       5
     ],
-    "myReels" : [1, 2, 3],
+    "myReels": [
+      1,
+      2,
+      3
+    ],
     "password": "123"
   },
   {
@@ -132,7 +136,22 @@
     "username": "Lodu Nitish",
     "email": "loduNitish@12",
     "password": "123",
-    "myPost" : [2, 5],
-    "myVideos" : [1, 2, 3]
+    "myPost": [
+      2,
+      5
+    ],
+    "myVideos": [
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "id": "20",
+    "username": "example",
+    "email": "example@email.com",
+    "myPost": [],
+    "myReels": [],
+    "password": "password123"
   }
 ]
