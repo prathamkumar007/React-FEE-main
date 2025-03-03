@@ -89,7 +89,6 @@ function UserProfile() {
         </div>
         <div className={styles.part3}>
           <div className={styles.Name}>
-            <h3>{cUser}</h3>
           </div>
           <div className={styles["threads-account"]}>
             <button className={styles["thread-btn"]}>
