@@ -49,7 +49,7 @@ function ProfilePost() {
         
         const user = data.find((user) => user.email === cUser);
         if (user) {
-          const reelIds = user.myVideos.flat();
+          const reelIds = user.myReels.flat();
           fetchReelVideos(reelIds);
         }
       } catch (error) {
@@ -98,8 +98,6 @@ function ProfilePost() {
           <p className={styles["share-p"]}>TAGGED</p>
         </div>
       </div>
-
-      {/* Render dynamic images */}
       <div className={styles["share-2"]}>
         {imageUrls.map((url, index) => (
           <img key={index} src={url} alt={`Post ${index}`} />

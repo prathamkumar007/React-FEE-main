@@ -41,7 +41,7 @@ app.post("/auth/signup", async (req, res) => {
     username,
     email,
     myPost: [],
-    myReels: [], // Only use myReels, not myVideos
+    myReels: [],
     password
   };
   users.push(newUser);
@@ -132,7 +132,7 @@ const readReel = async() => {
     return JSON.parse(data);
   }
   catch(err){
-    return {};  // Initialize as empty object instead of array
+    return {};
   }
 }
 const writeReel = async(reels) => {

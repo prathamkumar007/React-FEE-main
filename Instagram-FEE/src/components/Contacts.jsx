@@ -9,7 +9,7 @@ function Contacts(){
         },
       ];
 
-    let uName = localStorage.getItem("cUser");  // Now stores email
+    let uName = localStorage.getItem("cUser");
     return(
         <div className={styles.contacts}>
             <div className={styles.username}>
