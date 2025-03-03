@@ -57,10 +57,10 @@ const handleSubmit = async (e) => {
 
     const data = await response.json();
     if (response.ok) {
-      localStorage.setItem("cUser", email); // Store email for display
+      localStorage.setItem("cUser", email);
       navigate("/");
     } else {
-      setError(data.message);
+      alert(data.message);
     }
   } catch (error) {
     setError("An error occurred during login");

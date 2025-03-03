@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./ProfilePost.module.css";
+import { use } from "react";
 
 function ProfilePost() {
   const [imageUrls, setImageUrls] = useState([]);
@@ -27,6 +28,7 @@ function ProfilePost() {
           postIds.map(async (id) => {
             const res = await fetch(`http://localhost:4000/post/${id}`);
             const data = await res.text();
+            console.log(data)
             return data;
           })
         );
@@ -39,41 +41,40 @@ function ProfilePost() {
     fetchUserPosts();
   }, [cUser]);
 
-  const [videoUrl, setVideoUrl] = useState([]);
+  const [videoUrl, setVideoUrl] = useState("");
 
   useEffect(() => {
-    async function fetchUserReels() {
-      try {
-        const response = await fetch("http://localhost:4000/users");
+    async function fetchReels(){
+      try{
+        const response = await fetch("https://localhost:4000/reels");
         const data = await response.json();
-        
-        const user = data.find((user) => user.email === cUser);
-        if (user) {
-          const reelIds = user.myReels.flat();
-          fetchReelVideos(reelIds);
+
+        const user = data.find((user) => user.email == cUser);
+        if(user){
+          const reelsIds = user.myReel.flat();
+          fetchReelVideos(reelsIds);
         }
-      } catch (error) {
-        console.error("Error fetching users:", error);
+      }
+      catch(error){
+        console.error("Error fetching reels:", error);
       }
     }
-
-    async function fetchReelVideos(reelIds) {
-      try {
+    async function fetchReelVideos(reelsIds){
+      try{
         const urls = await Promise.all(
-          reelIds.map(async (id) => {
-            const res = await fetch(`http://localhost:4000/reels/${id}`);
+          reelsIds.map(async (id) => {
+            const res = await fetch(`http://localhost:4000/reel/${id}`);
             const data = await res.text();
-            console.log(data)
             return data;
           })
         );
         setVideoUrl(urls);
-      } catch (error) {
+      }
+      catch(error){
         console.error("Error fetching reel videos:", error);
       }
     }
-
-    fetchUserReels();
+    fetchReels();
   }, [cUser]);
 
   return (
@@ -98,6 +99,8 @@ function ProfilePost() {
           <p className={styles["share-p"]}>TAGGED</p>
         </div>
       </div>
+
+      {/* Render dynamic images */}
       <div className={styles["share-2"]}>
         {imageUrls.map((url, index) => (
           <img key={index} src={url} alt={`Post ${index}`} />

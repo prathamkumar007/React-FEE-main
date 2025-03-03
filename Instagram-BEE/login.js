@@ -7,7 +7,7 @@ const PORT = 4000;
 const USERS_FILE = "./users.json";
 const post_file = "./posts.json";
 const reels_file = "./reels.json";
-app.use(express.json());
+app.use(express.json);
 app.use(cors({ origin: "http://localhost:5173" }));
 
 const readUsers = async () => {
@@ -87,6 +87,22 @@ app.delete("/user/:id", async(req, res) => {
   res.json({ message: "User deleted successfully" });
 })
 
+// For Update
+app.put("/user/:id", async(req, res) => {
+  const id = req.params.id;
+  const { username, email, password } = req.body;
+  const users = await readUsers();
+  const user = users.find((user) => user.id === id);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  user.username = username;
+  user.email = email;
+  user.password = password;
+  await writeUsers(users);
+  res.json({ message: "User updated successfully" });
+})
+
 // For Posts
 const readPost =async()=>{
   try{
@@ -125,6 +141,23 @@ app.get("/post/:number", async (req, res) => {
   }
 });
 
+app.put("/post/:number", async (req, res) => {
+  const number = req.params.number;
+  const { imagePath } = req.body;
+  const posts = await readPost();
+  posts[number] = imagePath;
+  await writePost(posts);
+  res.json({ message: "Post updated successfully" });
+});
+
+app.delete("/post/:number", async (req, res) => {
+  const number = req.params.number;
+  const posts = await readPost();
+  delete posts[number];
+  await writePost(posts);
+  res.json({ message: "Post deleted successfully" });
+});
+
 // For Reels
 const readReel = async() => {
   try{
@@ -140,14 +173,19 @@ const writeReel = async(reels) => {
 }
 
 app.post("/reels", async(req, res) => {
-  const {number, videoPath} = req.body;
-  if(!number || !videoPath){
-    return res.status(400).json({message : "Number and videoPAth are required"});
+  try {
+    const {number, videoPath} = req.body;
+    if(!number || !videoPath){
+      return res.status(400).json({message : "Number and videoPath are required"});
+    }
+
+    let reels = await readReel();
+    reels[number] = videoPath;
+    await writeReel(reels);
+    res.status(201).json({message : "Reel added successfully!"});
+  } catch (error) {
+    res.status(400).json({message: "Invalid request format"});
   }
-  let reels = await readReel();
-  reels[number] = videoPath;
-  await writeReel(reels);
-  res.status(201).json({message : "Reel added successfully!"});
 })
 
 app.get("/reels/:number", async(req, res) => {
@@ -165,5 +203,22 @@ app.get("/reels", async(req, res) => {
   const data = await readReel();
   res.json(data);
 });
+
+app.delete("/reels/:number", async(req, res) => {
+  const number = req.params.number;
+  const reels = await readReel();
+  delete reels[number];
+  await writeReel(reels);
+  res.json({message: "Reel deleted successfully"});
+})
+
+app.put("/reels/:number", async(req, res) => {
+  const number = req.params.number;
+  const reels = await readReel();
+  const {videoPath} = req.body;
+  reels[number] = videoPath;
+  await writeReel(reels);
+  res.json({message: "Reel updated successfully"});
+})
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
