@@ -41,7 +41,7 @@ app.post("/auth/signup", async (req, res) => {
     username,
     email,
     myPost: [],
-    myReels: [],
+    myReels: [], // Only use myReels, not myVideos
     password
   };
   users.push(newUser);
