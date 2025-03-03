@@ -31,6 +31,14 @@
     border-radius: 10px;
     cursor: pointer;
 }
+.share-2 video {
+    width: 20vw;
+    height: 40vh;
+    object-fit: cover;
+    padding: 1vh;
+    border-radius: 10px;
+    cursor: pointer;
+}
 hr{
     width: 100%;
     border: 1px solid rgba(128, 128, 128, 0.5);

@@ -13,7 +13,7 @@ function ProfilePost() {
         
         const user = data.find((user) => user.email === cUser);
         if (user) {
-          const postIds = user.myPost.flat(); // Flatten nested array
+          const postIds = user.myPost.flat();
           fetchPostImages(postIds);
         }
       } catch (error) {
@@ -26,9 +26,8 @@ function ProfilePost() {
         const urls = await Promise.all(
           postIds.map(async (id) => {
             const res = await fetch(`http://localhost:4000/post/${id}`);
-            const data = await res.text(); // API returns a string
-            console.log(data)
-            return data; // Directly use the string response
+            const data = await res.text();
+            return data;
           })
         );
         setImageUrls(urls);
@@ -38,6 +37,28 @@ function ProfilePost() {
     }
 
     fetchUserPosts();
+  }, [cUser]);
+
+  const [videoUrl, setVideoUrl] = useState([]);  // Initialize as array instead of string
+
+  useEffect(() => {
+    async function fetchReels(){
+      try{
+        const response = await fetch("http://localhost:4000/reels");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        // Since reels are stored as an object, we get the values
+        const reelUrls = Object.values(data);
+        setVideoUrl(reelUrls);
+      }
+      catch(error){
+        console.error("Error fetching reels:", error);
+      }
+    }
+
+    fetchReels();
   }, [cUser]);
 
   return (
@@ -67,6 +88,9 @@ function ProfilePost() {
       <div className={styles["share-2"]}>
         {imageUrls.map((url, index) => (
           <img key={index} src={url} alt={`Post ${index}`} />
+        ))}
+        {videoUrl.map((url, index) => (
+          <video key={index} src={url} controls></video>
         ))}
       </div>
     </div>
