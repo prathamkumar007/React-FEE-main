@@ -68,10 +68,8 @@ app.post("/auth/login", async (req, res) => {
   
   res.json({ 
     message: "Login successful",
-    username: user.username,
     email: user.email,
-    myPost: user.myPost || [],
-    myReels: user.myReels || []
+    myPost: user.myPost || []
   });
 });
 
@@ -134,7 +132,7 @@ const readReel = async() => {
     return JSON.parse(data);
   }
   catch(err){
-    return {}; 
+    return {};  // Initialize as empty object instead of array
   }
 }
 const writeReel = async(reels) => {

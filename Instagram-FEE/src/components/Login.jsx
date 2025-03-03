@@ -44,21 +44,6 @@ function Login({setUser}) {
     navigate("/signup");
   };
 
-const loginUser = async ( email, password) => {
-  try {
-    console.log(email,password);
-    currentUser = email;
-    localStorage.setItem("cUser", currentUser);
-    const response = await axios.post("http://localhost:4000/auth/login", {
-      email,
-      password,
-    });
-    console.log(response.data);
-    navigate("/");
-  } catch (error) {
-    alert(error.response.data.message);
-  }
-};
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
@@ -72,9 +57,7 @@ const handleSubmit = async (e) => {
 
     const data = await response.json();
     if (response.ok) {
-      localStorage.setItem("cUser", data.username);
-      localStorage.setItem("userEmail", data.email);
-      localStorage.setItem("userPosts", JSON.stringify(data.myPost));
+      localStorage.setItem("cUser", email); // Store email for display
       navigate("/");
     } else {
       setError(data.message);
@@ -83,6 +66,7 @@ const handleSubmit = async (e) => {
     setError("An error occurred during login");
   }
 };
+
   return (
     <div className="container">
       <main className="main">

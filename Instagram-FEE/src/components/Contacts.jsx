@@ -9,14 +9,14 @@ function Contacts(){
         },
       ];
 
-    let uName = localStorage.getItem("cUser");
+    let uName = localStorage.getItem("cUser");  // Now stores email
     return(
         <div className={styles.contacts}>
             <div className={styles.username}>
                 <img src="/Images/user.png" alt="" />
                 <div className={styles["user-account"]}>
                     <p>{uName}</p>
-                    {/* <p className={styles["user-name"]}>{uName}</p> */}
+                    <p className={styles["user-name"]}>{uName}</p>
                 </div>
                 <a href="#" onClick="toggleLogin()">Switch</a>
                 <div className={styles["modal-background"]} id="modalBackground"></div>
