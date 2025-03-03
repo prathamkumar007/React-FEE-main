@@ -59,10 +59,29 @@ const loginUser = async ( email, password) => {
     alert(error.response.data.message);
   }
 };
-const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
-  setError(null);
-  loginUser(email,password);
+  try {
+    const response = await fetch("http://localhost:4000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      localStorage.setItem("cUser", data.username);
+      localStorage.setItem("userEmail", data.email);
+      localStorage.setItem("userPosts", JSON.stringify(data.myPost));
+      navigate("/");
+    } else {
+      setError(data.message);
+    }
+  } catch (error) {
+    setError("An error occurred during login");
+  }
 };
   return (
     <div className="container">

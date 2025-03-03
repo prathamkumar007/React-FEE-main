@@ -15,8 +15,8 @@ function Contacts(){
             <div className={styles.username}>
                 <img src="/Images/user.png" alt="" />
                 <div className={styles["user-account"]}>
-                    <p>User</p>
-                    <p className={styles["user-name"]}>{uName}</p>
+                    <p>{uName}</p>
+                    {/* <p className={styles["user-name"]}>{uName}</p> */}
                 </div>
                 <a href="#" onClick="toggleLogin()">Switch</a>
                 <div className={styles["modal-background"]} id="modalBackground"></div>

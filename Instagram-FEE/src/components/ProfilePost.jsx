@@ -8,13 +8,13 @@ function ProfilePost() {
   useEffect(() => {
     async function fetchUserPosts() {
       try {
+        const userEmail = localStorage.getItem("userEmail");
         const response = await fetch("http://localhost:4000/users");
         const data = await response.json();
         
-        const user = data.find((user) => user.email === cUser);
-        if (user) {
-          const postIds = user.myPost.flat();
-          fetchPostImages(postIds);
+        const user = data.find((user) => user.email === userEmail);
+        if (user && user.myPost && user.myPost.length > 0) {
+          fetchPostImages(user.myPost);
         }
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -26,11 +26,14 @@ function ProfilePost() {
         const urls = await Promise.all(
           postIds.map(async (id) => {
             const res = await fetch(`http://localhost:4000/post/${id}`);
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
             const data = await res.text();
             return data;
           })
         );
-        setImageUrls(urls);
+        setImageUrls(urls.filter(url => url)); // Filter out any null/undefined values
       } catch (error) {
         console.error("Error fetching post images:", error);
       }
@@ -44,17 +47,36 @@ function ProfilePost() {
   useEffect(() => {
     async function fetchReels(){
       try{
-        const response = await fetch("http://localhost:4000/reels");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        const userEmail = localStorage.getItem("userEmail");
+        const response = await fetch("http://localhost:4000/users");
         const data = await response.json();
-        // Since reels are stored as an object, we get the values
-        const reelUrls = Object.values(data);
-        setVideoUrl(reelUrls);
+        
+        const user = data.find((user) => user.email === userEmail);
+        if (user && user.myReels && user.myReels.length > 0) {
+          fetchReelVideos(user.myReels);
+        }
       }
       catch(error){
-        console.error("Error fetching reels:", error);
+        console.error("Error fetching user reels:", error);
+      }
+    }
+
+    async function fetchReelVideos(reelIds) {
+      try {
+        const urls = await Promise.all(
+          reelIds.map(async (id) => {
+            const res = await fetch(`http://localhost:4000/reels/${id}`);
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const data = await res.text();
+            return data;
+          })
+        );
+        setVideoUrl(urls.filter(url => url)); // Filter out any null/undefined values
+      }
+      catch(error) {
+        console.error("Error fetching reel videos:", error);
       }
     }
 

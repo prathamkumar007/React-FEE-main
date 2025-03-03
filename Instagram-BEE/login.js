@@ -66,7 +66,13 @@ app.post("/auth/login", async (req, res) => {
     return res.status(401).json({ message: "Incorrect password" });
   }
   
-  res.json({ message: "Login successful" });
+  res.json({ 
+    message: "Login successful",
+    username: user.username,
+    email: user.email,
+    myPost: user.myPost || [],
+    myReels: user.myReels || []
+  });
 });
 
 app.get("/users",async(req,res)=>{
@@ -128,7 +134,7 @@ const readReel = async() => {
     return JSON.parse(data);
   }
   catch(err){
-    return {};  // Initialize as empty object instead of array
+    return {}; 
   }
 }
 const writeReel = async(reels) => {

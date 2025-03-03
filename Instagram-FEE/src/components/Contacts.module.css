@@ -3,6 +3,7 @@
 }
 .user-account{
     margin-left: 1vw;
+    align-content: center;
 }
 .user-account .user-name{
     color: rgb(115, 115, 115);
