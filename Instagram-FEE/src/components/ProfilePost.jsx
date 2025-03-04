@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import styles from "./ProfilePost.module.css";
-import { use } from "react";
 
 function ProfilePost() {
   const [imageUrls, setImageUrls] = useState([]);
+
   let cUser = localStorage.getItem("cUser");
 
   useEffect(() => {
     async function fetchUserPosts() {
       try {
-        const response = await fetch("http://localhost:4000/users");
+        const response = await fetch("http://localhost:4000/auth/users");
         const data = await response.json();
         
         const user = data.find((user) => user.email === cUser);
@@ -41,17 +41,17 @@ function ProfilePost() {
     fetchUserPosts();
   }, [cUser]);
 
-  const [videoUrl, setVideoUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState([]);
 
   useEffect(() => {
     async function fetchReels(){
       try{
-        const response = await fetch("https://localhost:4000/reels");
+        const response = await fetch("http://localhost:4000/auth/users");
         const data = await response.json();
 
         const user = data.find((user) => user.email == cUser);
         if(user){
-          const reelsIds = user.myReel.flat();
+          const reelsIds = user.myReels.flat();
           fetchReelVideos(reelsIds);
         }
       }
@@ -63,7 +63,7 @@ function ProfilePost() {
       try{
         const urls = await Promise.all(
           reelsIds.map(async (id) => {
-            const res = await fetch(`http://localhost:4000/reel/${id}`);
+            const res = await fetch(`http://localhost:4000/reels/${id}`);
             const data = await res.text();
             return data;
           })
@@ -100,7 +100,6 @@ function ProfilePost() {
         </div>
       </div>
 
-      {/* Render dynamic images */}
       <div className={styles["share-2"]}>
         {imageUrls.map((url, index) => (
           <img key={index} src={url} alt={`Post ${index}`} />
