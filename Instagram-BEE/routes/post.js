@@ -15,6 +15,11 @@ router.post("/", async (req, res) => {
   res.status(201).json({ message: "Post added successfully!" });
 });
 
+router.get("/", async(req, res) => {
+  const data = await readPosts();
+  res.json(data);
+})
+
 router.get("/:number", async (req, res) => {
   const number = req.params.number;
   const data = await readPosts();

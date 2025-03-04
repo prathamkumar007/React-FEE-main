@@ -14,6 +14,11 @@ router.post("/", async (req, res) => {
   res.status(201).json({ message: "Reel added successfully!" });
 });
 
+router.get("/", async(req, res) => {
+  const data = await readReels();
+  res.json(data);
+})
+
 router.get("/:number", async (req, res) => {
   const number = req.params.number;
   const data = await readReels();
