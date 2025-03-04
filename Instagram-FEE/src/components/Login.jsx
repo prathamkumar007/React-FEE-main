@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Login.css";
 import { resolvePath, useNavigate } from "react-router";
-import axios from 'axios';
 
 function Login({setUser}) {
   const [phoneImages, setPhoneImages] = useState({
