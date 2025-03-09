@@ -9,9 +9,14 @@ function ProfilePost() {
   useEffect(() => {
     async function fetchUserPosts() {
       try {
-        const response = await fetch("http://localhost:4000/auth/users");
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:5000/auth/users", {
+          headers: {
+            Authorization : `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
         const data = await response.json();
-        
         const user = data.find((user) => user.email === cUser);
         if (user) {
           const postIds = user.myPost.flat();
@@ -26,9 +31,8 @@ function ProfilePost() {
       try {
         const urls = await Promise.all(
           postIds.map(async (id) => {
-            const res = await fetch(`http://localhost:4000/post/${id}`);
+            const res = await fetch(`http://localhost:5000/post/${id}`);
             const data = await res.text();
-            console.log(data)
             return data;
           })
         );
@@ -46,7 +50,13 @@ function ProfilePost() {
   useEffect(() => {
     async function fetchReels(){
       try{
-        const response = await fetch("http://localhost:4000/auth/users");
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:5000/auth/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          }
+        });
         const data = await response.json();
 
         const user = data.find((user) => user.email == cUser);
@@ -63,7 +73,7 @@ function ProfilePost() {
       try{
         const urls = await Promise.all(
           reelsIds.map(async (id) => {
-            const res = await fetch(`http://localhost:4000/reels/${id}`);
+            const res = await fetch(`http://localhost:5000/reels/${id}`);
             const data = await res.text();
             return data;
           })

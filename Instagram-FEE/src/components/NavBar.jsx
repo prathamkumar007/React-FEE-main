@@ -1,8 +1,11 @@
-import {useState } from 'react';
+import {useEffect, useRef, useState } from 'react';
 import styles from './NavBar.module.css';
 import {Link, useNavigate} from 'react-router-dom'
+
 function NavBar(){
     const navigate = useNavigate();
+    const [showMore, setShowMore] = useState(false);
+    const moreMenuRef = useRef(null);
 
     const navLinks = [
         {label : 'Home', to : '/', lightIcon : '/Images/hut.png', darkIcon : '/Images/darkHome.png'},
@@ -10,7 +13,7 @@ function NavBar(){
         {label : 'Explore', to : '/explore', lightIcon : '/Images/compass.png', darkIcon : '/Images/darkExplore.png'},
         {label : 'Reels', to : '/reels', lightIcon : '/Images/reels.png', darkIcon : '/Images/darkReel.png'},
         {label : 'Messages', to : '/messages', lightIcon : '/Images/messenger.png', darkIcon : '/Images/darkMessage.png'},
-        {label : 'Notications', to : '/notifications', lightIcon : '/Images/notification.png', darkIcon : '/Images/darkMessage.png'},
+        {label : 'Notifications', to : '/notifications', lightIcon : '/Images/notification.png', darkIcon : '/Images/darkMessage.png'},
         {label : 'Create', to : '/create', lightIcon : '/Images/tab.png', darkIcon : '/Images/darkCreate.png'},
         {label : 'Profile', to : '/profile', lightIcon : '/Images/user.png', darkIcon : ''},
     ]
@@ -22,15 +25,31 @@ function NavBar(){
         {label : 'Switch appearance', lightIcon : '/Images/sun.png', darkIcon : 'darkMoon.png'},
         {label : 'Report Problems', lightIcon : '/Images/problem.png', darkIcon : 'darkProblem.png'},
     ]
-    const [showMore, setShowMore] = useState(false);
-    
+
     const toggleMoreMenu = () => {
         setShowMore(prevState => !prevState);
     }
-    const handleLogin = () =>{
+
+    const handleLogout = (e) =>{
+        e.stopPropagation();
+        localStorage.removeItem("token");
         navigate("/login");
+        setShowMore(false);
     }
 
+    useEffect(() => {
+        const handleClickOutside = (event) =>{
+            if(moreMenuRef.current && !moreMenuRef.current.contains(event.target)){
+                setShowMore(false);
+            }
+        };
+        if(showMore){
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+    }, [showMore]);
     return(
         <div className={styles.navbar}>
             <div className={styles["nav-logo"]}>
@@ -62,7 +81,8 @@ function NavBar(){
             </div>
             
             {showMore && (
-                <div className={`${styles["more-settings"]} ${showMore ? styles.show : ''}`}>
+                <div className={`${styles["more-settings"]} ${showMore ? styles.show : ''}`} onClick = {(e) => e.stopPropagation()}
+                ref = {moreMenuRef}>
                     {moreLinks.map((link, index) => (
                         <div key={index} className={styles["more-set"]}>
                             <img src={link.lightIcon} alt={`${link.label} Icon`} className="light-set" />
@@ -73,7 +93,7 @@ function NavBar(){
                         <span className={styles.links}>Switch Accounts</span>
                     </div>
                     <hr />
-                    <div className={styles["more-set"]} onClick={handleLogin}>
+                    <div className={styles["more-set"]} onClick={handleLogout}>
                         <span className={styles.links}>Log Out</span>
                     </div>
                     <hr />

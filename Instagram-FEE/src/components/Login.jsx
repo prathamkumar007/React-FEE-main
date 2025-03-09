@@ -56,7 +56,8 @@ const handleSubmit = async (e) => {
 
     const data = await response.json();
     if (response.ok) {
-      sessionStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("tokenExpiry", Date.now() + 3*60*60*1000)
       navigate("/");
     } else {
       alert(data.message);
