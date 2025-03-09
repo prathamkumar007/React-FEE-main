@@ -1,5 +1,4 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState } from "react"
 import "./Signup.css";
 import { useNavigate } from "react-router";
 
@@ -10,20 +9,30 @@ export default function SignUp() {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
   const signupUser = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:4000/auth/signup", {
-        username,
-        email,
-        password
+      const response = await fetch("http://localhost:5000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({username, email, password}),
       });
-      alert(response.data.message );
+      const data = await response.json();
+      console.log(data)
+      if(response.ok){
+        alert(data.message);
+      }
+      else{
+        alert(data.message || "Signup failed");
+      }
     } catch (error) {
-      alert(error.response?.data?.message || "Signup failed" );
+      alert("An error occured during signup");
     } finally {
       setIsSubmitting(false);
     }

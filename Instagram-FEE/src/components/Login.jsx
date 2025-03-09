@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Login.css";
 import { resolvePath, useNavigate } from "react-router";
 
-function Login({setUser}) {
+function Login() {
   const [phoneImages, setPhoneImages] = useState({
     back: "",
     front: "",
@@ -46,7 +46,7 @@ function Login({setUser}) {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const response = await fetch("http://localhost:4000/auth/login", {
+    const response = await fetch("http://localhost:5000/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const handleSubmit = async (e) => {
 
     const data = await response.json();
     if (response.ok) {
-      localStorage.setItem("cUser", email);
+      sessionStorage.setItem("token", data.token);
       navigate("/");
     } else {
       alert(data.message);

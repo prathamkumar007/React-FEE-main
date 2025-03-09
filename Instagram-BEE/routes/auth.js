@@ -1,8 +1,13 @@
+require("dotenv").config();
+
 const express = require("express");
 const bcrypt = require('bcrypt');
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 const { readUsers, writeUsers } = require("../utils/fileUtils");
+const authenticationToken = require("../middlewares/authMiddleware");
 
+const SECRET_KEY = process.env.SECRET_KEY;
 const saltRounds = 10;
 
 const findUserByEmail = async(email) => {
@@ -54,7 +59,7 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await findUserByEmail(email);
   if(!user){
-    res.status(401).json({message : "Invalid email "})
+    return res.status(401).json({message : "Invalid email "})
   }
 
   const isMatch = await verifiedPassword(password, user.password);
@@ -62,15 +67,17 @@ router.post("/login", async (req, res) => {
     return res.status(401).json({ message: "Invalid password" });
   }
 
-  res.json({ message: "Login successful", email: user.email, myPost: user.myPost || [] });
+  const token = jwt.sign({id: user.id, email: user.email}, SECRET_KEY, {expiresIn: "1h"});
+
+  res.json({ message: "Login successful", token, email: user.email, myPost: user.myPost || [] });
 });
 
-router.get("/users", async (req, res) => {
+router.get("/users", authenticationToken, async (req, res) => {
   const data = await readUsers();
   res.json(data);
 })
 
-router.get("/users/:id", async(req, res) => {
+router.get("/users/:id", authenticationToken, async(req, res) => {
   const {id} = req.params;
   const users = await readUsers();
   const user = users.find((u) => u.id === id);
