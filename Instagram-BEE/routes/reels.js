@@ -4,7 +4,7 @@ const { readReels, writeReels } = require("../utils/fileUtils");
 
 router.post("/", async (req, res) => {
   const { number, videoPath } = req.body;
-  if (!number || !videoPath) {
+  if (!number || !videoPath){
     return res.status(400).json({ message: "Number and videoPath are required" });
   }
 

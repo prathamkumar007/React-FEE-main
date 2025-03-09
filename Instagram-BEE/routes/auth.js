@@ -1,6 +1,23 @@
 const express = require("express");
+const bcrypt = require('bcrypt');
 const router = express.Router();
 const { readUsers, writeUsers } = require("../utils/fileUtils");
+
+const saltRounds = 10;
+
+const findUserByEmail = async(email) => {
+  const users = await readUsers();
+  return users.find((u) => u.email === email);
+}
+
+const findUserByUsername = async(username) => {
+  const users = await readUsers();
+  return users.find((u) => u.username === username);
+}
+
+const verifiedPassword = async(enteredPassword, storedHashesPassword) => {
+  return bcrypt.compare(enteredPassword, storedHashesPassword);
+};
 
 router.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
@@ -9,9 +26,15 @@ router.post("/signup", async (req, res) => {
   }
 
   const users = await readUsers();
-  if (users.some((user) => user.email === email)) {
+  if (await findUserByEmail(email)) {
     return res.status(400).json({ message: "Email already exists" });
   }
+
+  if(await findUserByUsername(username)){
+    return res.status(401).json({message: "Username already taken"});
+  }
+
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
   const newId = (users.length + 1).toString();
   const newUser = {
     id: newId,
@@ -19,7 +42,7 @@ router.post("/signup", async (req, res) => {
     email,
     myPost: [],
     myReels: [],
-    password
+    password : hashedPassword
   };
 
   users.push(newUser);
@@ -29,12 +52,14 @@ router.post("/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const users = await readUsers();
-  const user = users.find((u) => u.email === email);
+  const user = await findUserByEmail(email);
+  if(!user){
+    res.status(401).json({message : "Invalid email "})
+  }
 
-  const isMatch = users.find((u)=>u.email==email && u.password == password);
+  const isMatch = await verifiedPassword(password, user.password);
   if (!isMatch) {
-    return res.status(401).json({ message: "Incorrect password" });
+    return res.status(401).json({ message: "Invalid password" });
   }
 
   res.json({ message: "Login successful", email: user.email, myPost: user.myPost || [] });
@@ -72,7 +97,7 @@ router.put("/users/:id", async(req, res) => {
     users[userIndex].email = email;
   }
   if(password){
-    users[userIndex].password = password;
+    users[userIndex].password = await bcrypt.hash(password, saltRounds);
   }
 
   await writeUsers(users);
