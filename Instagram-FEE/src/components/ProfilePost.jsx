@@ -10,7 +10,7 @@ function ProfilePost() {
     async function fetchUserPosts() {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/auth/users", {
+        const response = await fetch("https://react-fee-main.onrender.com/auth/users", {
           headers: {
             Authorization : `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -31,7 +31,7 @@ function ProfilePost() {
       try {
         const urls = await Promise.all(
           postIds.map(async (id) => {
-            const res = await fetch(`http://localhost:5000/post/${id}`);
+            const res = await fetch(`https://react-fee-main.onrender.com/post/${id}`);
             const data = await res.text();
             return data;
           })
@@ -51,7 +51,7 @@ function ProfilePost() {
     async function fetchReels(){
       try{
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/auth/users", {
+        const response = await fetch("https://react-fee-main.onrender.com/auth/users", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -73,7 +73,7 @@ function ProfilePost() {
       try{
         const urls = await Promise.all(
           reelsIds.map(async (id) => {
-            const res = await fetch(`http://localhost:5000/reels/${id}`);
+            const res = await fetch(`https://react-fee-main.onrender.com/reels/${id}`);
             const data = await res.text();
             return data;
           })

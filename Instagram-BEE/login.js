@@ -3,12 +3,12 @@ const fs = require("fs/promises");
 const cors = require("cors");
 
 const app = express();
-const PORT = 4000;
+const PORT = 5000;
 const USERS_FILE = "./users.json";
 const post_file = "./posts.json";
 const reels_file = "./reels.json";
-app.use(express.json);
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(express.json());
+app.use(cors({ origin: "*" }));
 
 const readUsers = async () => {
   try {
