@@ -17,7 +17,7 @@
         if(!token || !expiryTime){
           localStorage.removeItem("token");
           localStorage.removeItem("tokenExpiry");
-          navigate("/login");expiryToken
+          navigate("/login");
           return;
         }
         const currentTime = Date.now();
