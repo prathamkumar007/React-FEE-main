@@ -82,3 +82,83 @@ a{
 .dark-set{
     display: none;
 }
+
+@media screen and (max-width: 1024px) {
+  .users-profile-child {
+    margin-left: 8vw;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .users-profile-child {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .users-profile-child img {
+    width: 120px;
+  }
+  
+  .all-details {
+    margin-left: 0;
+    margin-top: 20px;
+    text-align: center;
+    margin: 20px 0 0 0;
+    width: 100%;
+  }
+  
+  .part1 {
+    justify-content: center;
+    padding: 0 15px;
+    gap: 15px;
+  }
+  
+  .part2 {
+    justify-content: center;
+    padding: 0 15px;
+    gap: 15px;
+  }
+  
+  .part3 {
+    padding: 0 15px;
+  }
+  
+  .threads-account img {
+    width: 15px;
+    height: 15px;
+  }
+  
+  button {
+    padding: 8px 16px;
+  }
+  
+  .new img {
+    width: 60px;
+    height: 60px;
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .part1 img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .users-profile-child {
+    padding: 15px 10px;
+  }
+  
+  .part1, .part2 {
+    padding: 0 10px;
+    gap: 10px;
+  }
+}

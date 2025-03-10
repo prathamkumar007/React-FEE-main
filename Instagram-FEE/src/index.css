@@ -28,3 +28,37 @@ body,html{
     margin-left: 15%;
     height: 100%;
 }
+
+@media screen and (max-width: 1024px) {
+  .stories {
+    width: 70%;
+    margin-left: 20%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    padding: 0 10px;
+  }
+  .stories {
+    width: 95%;
+    margin: 12vh auto 0;
+    padding: 0;
+  }
+  .users-profile {
+    width: 95%;
+    margin: 10vh auto 0;
+    padding-bottom: 10vh;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 0 5px;
+  }
+  .stories {
+    width: 100%;
+    margin-top: 8vh;
+  }
+}

@@ -81,3 +81,82 @@
     display: none;
     color: white;
 }
+
+@media screen and (max-width: 1024px) {
+  .post1 {
+    margin-right: 0;
+    max-width: 500px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .posts {
+    margin-top: 2vh;
+    width: 100%;
+  }
+  
+  .post1 {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 3vh 0;
+  }
+
+  .name {
+    padding: 10px;
+  }
+
+  .champions {
+    padding: 10px 15px;
+  }
+
+  .likecommentshare {
+    padding: 5px 10px;
+  }
+
+  .left {
+    padding-left: 5vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .like, .comment, .share, .save {
+    font-size: 1.2rem;
+    margin: 0px 0.5vh;
+  }
+  .like p, .comment p, .share p {
+    font-size: 0.8rem;
+  }
+
+  .left {
+    padding-left: 2vw;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .likecommentshare {
+    gap: 5px;
+  }
+
+  .like, .comment, .share, .save {
+    font-size: 1rem;
+    margin: 0px 0.3vh;
+  }
+
+  .like p, .comment p, .share p {
+    font-size: 0.7rem;
+  }
+
+  .left {
+    padding-left: 1vw;
+  }
+
+  .name .indiact {
+    width: 28px;
+    height: 28px;
+  }
+
+  .name .tick {
+    width: 14px;
+    height: 14px;
+  }
+}

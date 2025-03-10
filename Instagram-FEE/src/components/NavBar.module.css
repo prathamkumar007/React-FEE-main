@@ -78,3 +78,104 @@
 .dark-set{
     display: none;
 }
+
+@media screen and (max-width: 1024px) {
+  .navbar {
+    width: 18%;
+    padding: 1.5vw;
+  }
+  
+  .namelogo {
+    font-size: 2.2vw;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .navbar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    border-right: none;
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+    padding: 8px 15px;
+    background: white;
+    z-index: 1000;
+  }
+  
+  .nav-logo {
+    display: none;
+  }
+  
+  .nav-topics {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+  
+  .topics {
+    margin-bottom: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+  }
+  
+  .topics img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .links {
+    font-size: 0.8rem;
+  }
+  
+  .nav-threads, .nav-more {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .navbar {
+    padding: 5px 5px;
+  }
+  
+  .nav-topics {
+    padding: 0;
+    gap: 0;
+  }
+  
+  .topics img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .links {
+    font-size: 0.7rem;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .navbar {
+    padding: 5px 2px;
+  }
+
+  .nav-topics {
+    justify-content: space-between;
+  }
+
+  .topics {
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .topics img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .links {
+    font-size: 0.6rem;
+  }
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Login.css";
-import { resolvePath, useNavigate } from "react-router";
+import {useNavigate } from "react-router";
 
 function Login() {
   const [phoneImages, setPhoneImages] = useState({
