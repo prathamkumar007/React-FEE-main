@@ -91,22 +91,32 @@
 
 @media screen and (max-width: 768px) {
   .posts {
-    margin-top: 2vh;
+    margin-top: 1vh;
     width: 100%;
   }
   
   .post1 {
     width: 100%;
     max-width: 100%;
-    margin: 0 0 3vh 0;
+    margin: 0 0 2vh 0;
+    border-radius: 0;
   }
 
   .name {
-    padding: 10px;
+    padding: 8px 12px;
+  }
+
+  .img-container {
+    margin-top: 0;
+    border-radius: 0;
+  }
+
+  .img-container img {
+    border-radius: 0;
   }
 
   .champions {
-    padding: 10px 15px;
+    padding: 8px 12px;
   }
 
   .likecommentshare {
@@ -114,21 +124,25 @@
   }
 
   .left {
-    padding-left: 5vw;
+    padding-left: 0;
   }
 }
 
 @media screen and (max-width: 480px) {
   .like, .comment, .share, .save {
-    font-size: 1.2rem;
-    margin: 0px 0.5vh;
+    font-size: 1.1rem;
+    margin: 0 8px;
   }
   .like p, .comment p, .share p {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 
   .left {
     padding-left: 2vw;
+  }
+
+  .likecommentshare {
+    padding: 0 8px;
   }
 }
 

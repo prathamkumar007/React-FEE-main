@@ -19,8 +19,18 @@
     "id": "3",
     "username": "pratham",
     "email": "pratham@12",
-    "myPost": [4],
+    "myPost": [
+      4
+    ],
     "myReels": [],
     "password": "$2b$10$ukI0StWwLcbT.ixXAJMGm.84dVhUZFFsSXysXFg4.8m/XSg2BHe66"
+  },
+  {
+    "id": "4",
+    "username": "test",
+    "email": "test@example.com",
+    "myPost": [],
+    "myReels": [],
+    "password": "$2b$10$wMH0KgYpTughbXdsSTsTL.B5DBKb6ih4XGNNchufpA5YHjM6p8GbC"
   }
 ]

@@ -91,74 +91,141 @@ a{
 
 @media screen and (max-width: 768px) {
   .users-profile-child {
-    flex-direction: column;
-    align-items: center;
-    margin-left: 0;
+    flex-direction: row;
+    align-items: flex-start;
     margin: 0;
-    padding: 20px;
+    padding: 16px;
+    gap: 20px;
+  }
+  
+  .profile-pic {
+    flex: 0 0 auto;
   }
   
   .users-profile-child img {
-    width: 120px;
+    width: 77px;
+    height: 77px;
+    border-radius: 50%;
   }
   
   .all-details {
-    margin-left: 0;
-    margin-top: 20px;
-    text-align: center;
-    margin: 20px 0 0 0;
-    width: 100%;
+    margin: 0;
+    width: calc(100% - 97px);
   }
   
   .part1 {
-    justify-content: center;
-    padding: 0 15px;
-    gap: 15px;
+    flex-wrap: nowrap;
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+  
+  .part1 .edit-btn,
+  .part1 .view-btn {
+    font-size: 12px;
+    padding: 6px 8px;
   }
   
   .part2 {
-    justify-content: center;
-    padding: 0 15px;
-    gap: 15px;
+    justify-content: space-between;
+    margin: 14px 0;
+    padding: 10px 0;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+  }
+  
+  .part2 p {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+  }
+  
+  .part2 span {
+    font-size: 16px;
   }
   
   .part3 {
-    padding: 0 15px;
+    font-size: 14px;
   }
   
-  .threads-account img {
-    width: 15px;
-    height: 15px;
+  .res-part1 {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
   }
   
-  button {
-    padding: 8px 16px;
+  .res-button {
+    display: flex;
+    gap: 8px;
   }
   
-  .new img {
-    width: 60px;
-    height: 60px;
-    margin-top: 20px;
+  .thread-btn {
+    font-size: 12px;
+  }
+  
+  .thread-btn img {
+    width: 14px;
+    height: 14px;
   }
 }
 
 @media screen and (max-width: 480px) {
-  button {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-  }
-  
-  .part1 img {
-    width: 20px;
-    height: 20px;
-  }
-  
   .users-profile-child {
-    padding: 15px 10px;
+    padding: 12px;
+    gap: 15px;
   }
   
-  .part1, .part2 {
-    padding: 0 10px;
-    gap: 10px;
+  .users-profile-child img {
+    width: 65px;
+    height: 65px;
+  }
+  
+  .all-details {
+    width: calc(100% - 80px);
+  }
+  
+  .part1 .edit-btn,
+  .part1 .view-btn {
+    font-size: 11px;
+    padding: 5px 7px;
+  }
+  
+  .part2 {
+    margin: 12px 0;
+    padding: 8px 0;
+  }
+  
+  .part2 p {
+    font-size: 13px;
+  }
+  
+  .part2 span {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .users-profile-child {
+    padding: 10px;
+    gap: 12px;
+  }
+  
+  .users-profile-child img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .all-details {
+    width: calc(100% - 72px);
+  }
+  
+  .part1 {
+    gap: 5px;
+  }
+  
+  .part1 .edit-btn,
+  .part1 .view-btn {
+    font-size: 10px;
+    padding: 4px 6px;
   }
 }

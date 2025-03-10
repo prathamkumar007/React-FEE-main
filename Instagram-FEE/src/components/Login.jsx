@@ -30,12 +30,7 @@ function Login() {
 
   useEffect(() => {
     fetchRandomImages();
-    const interval = setInterval(() => {
-      fetchRandomImages();
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, []);
+ }, []);
 
   const navigate = useNavigate();
 
