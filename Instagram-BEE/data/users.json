@@ -2,10 +2,10 @@
   {
     "id": "1",
     "username": "Pratham",
-    "email": "pratham12@gmail.com",
+    "email": "pratha12@gmail.com",
     "myPost": [],
     "myReels": [],
-    "password": "$2b$10$F1562usHdz8tm.Qw26NnQuMzCgvjwLhXDpoBEJtq5G02cWRnh29rO"
+    "password": "$2b$10$lHMH8VnMbs.htwH9sjrgl.eop4p3uW.k.kWPQDBNcekW1n/NptJyq"
   },
   {
     "id": "2",
@@ -13,7 +13,7 @@
     "email": "nitish@12",
     "myPost": [],
     "myReels": [],
-    "password": "$2b$10$ibNn2SLPg5luTAldr9VYLuCRPQNK258mT47gbhuun1OUd2FqE18WW"
+    "password": "$2b$10$cO5an/o/VJm.a6CAEZPQkurRTIpO1XI5hhGuVlwmEBOXkPstHmIEK"
   },
   {
     "id": "3",
@@ -24,13 +24,5 @@
     ],
     "myReels": [],
     "password": "$2b$10$ukI0StWwLcbT.ixXAJMGm.84dVhUZFFsSXysXFg4.8m/XSg2BHe66"
-  },
-  {
-    "id": "4",
-    "username": "test",
-    "email": "test@example.com",
-    "myPost": [],
-    "myReels": [],
-    "password": "$2b$10$wMH0KgYpTughbXdsSTsTL.B5DBKb6ih4XGNNchufpA5YHjM6p8GbC"
   }
 ]

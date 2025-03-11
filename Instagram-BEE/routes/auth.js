@@ -1,129 +1,136 @@
 require("dotenv").config();
-
 const express = require("express");
 const bcrypt = require('bcrypt');
-const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { readUsers, writeUsers } = require("../utils/fileUtils");
+const User = require("../models/User");
 const authenticationToken = require("../middlewares/authMiddleware");
 
+const router = express.Router();
 const SECRET_KEY = process.env.SECRET_KEY;
 const saltRounds = 10;
 
-const findUserByEmail = async(email) => {
-  const users = await readUsers();
-  return users.find((u) => u.email === email);
-}
-
-const findUserByUsername = async(username) => {
-  const users = await readUsers();
-  return users.find((u) => u.username === username);
-}
-
-const verifiedPassword = async(enteredPassword, storedHashesPassword) => {
-  return bcrypt.compare(enteredPassword, storedHashesPassword);
-};
-
 router.post("/signup", async (req, res) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
+  try {
+    const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email or username already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      myPost: [],
+      myReels: []
+    });
+
+    await newUser.save();
+    res.status(201).json({ message: "User registered successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error signing up", error });
   }
-
-  const users = await readUsers();
-  if (await findUserByEmail(email)) {
-    return res.status(400).json({ message: "Email already exists" });
-  }
-
-  if(await findUserByUsername(username)){
-    return res.status(401).json({message: "Username already taken"});
-  }
-
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
-  const newId = (users.length + 1).toString();
-  const newUser = {
-    id: newId,
-    username,
-    email,
-    myPost: [],
-    myReels: [],
-    password : hashedPassword
-  };
-
-  users.push(newUser);
-  await writeUsers(users);
-  res.status(201).json({ message: "User registered successfully" });
 });
 
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  const user = await findUserByEmail(email);
-  if(!user){
-    return res.status(401).json({message : "Invalid email "})
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    const token = jwt.sign({ id: user._id.toString(), email: user.email }, SECRET_KEY, { expiresIn: "3h" });
+
+    res.json({ message: "Login successful", token, email: user.email, myPost: user.myPost || [] });
+
+  } catch (error) {
+    res.status(500).json({ message: "Login error", error });
   }
-
-  const isMatch = await verifiedPassword(password, user.password);
-  if (!isMatch) {
-    return res.status(401).json({ message: "Invalid password" });
-  }
-
-  const token = jwt.sign({id: user.id, email: user.email}, SECRET_KEY, {expiresIn: "3h"});
-
-  res.json({ message: "Login successful", token, email: user.email, myPost: user.myPost || [] });
 });
 
 router.get("/users", authenticationToken, async (req, res) => {
-  const data = await readUsers();
-  res.json(data);
-})
-
-router.get("/users/:id", authenticationToken, async(req, res) => {
-  const {id} = req.params;
-  const users = await readUsers();
-  const user = users.find((u) => u.id === id);
-
-  if(!user){
-    res.status(404).json({message : "User not found"});
+  try {
+    const data = await User.find().select("-password");
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching users", error });
   }
-  res.json(user);
-})
-
-router.put("/users/:id", async(req, res) => {
-  const {id} = req.params;
-  const {username, email, password} = req.body;
-
-  const users = await readUsers();
-  const userIndex = users.findIndex((u) => u.id === id);
-  if(userIndex === -1){
-    res.status(404).json({message : "User not found"});
-  }
-  if(username){
-    users[userIndex].username = username;
-  }
-  if(email){
-    users[userIndex].email = email;
-  }
-  if(password){
-    users[userIndex].password = await bcrypt.hash(password, saltRounds);
-  }
-
-  await writeUsers(users);
-  res.json({ message: "User updated successfully", user: users[userIndex] });
 });
 
-router.delete("/users/:id", async(req, res) => {
-  const {id} = req.params;
+router.get("/users/:id", authenticationToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select("-password");
 
-  const users = await readUsers();
-  const userIndex = users.findIndex((u) => u.id === id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
 
-  if(userIndex === -1){
-    res.status(201).json({message : "User not found"});
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching user", error });
   }
-  users.splice(userIndex, 1);
-  await writeUsers(users);
+});
 
-  res.json({message : "User deleted successfully"});
-})
+router.put("/users/:id", authenticationToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, email, password } = req.body;
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (req.user.id.toString() !== id) {
+      return res.status(403).json({ message: "Unauthorized to update this user" });
+    }
+
+    if (username) user.username = username;
+    if (email) user.email = email;
+    if (password) user.password = await bcrypt.hash(password, saltRounds);
+
+    await user.save();
+    res.json({ message: "User updated successfully", user });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error updating user", error });
+  }
+});
+
+router.delete("/users/:id", authenticationToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (req.user.id.toString() !== id) {
+      return res.status(403).json({ message: "Unauthorized to delete this user" });
+    }
+
+    await User.findByIdAndDelete(id);
+    res.json({ message: "User deleted successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting user", error });
+  }
+});
 
 module.exports = router;
