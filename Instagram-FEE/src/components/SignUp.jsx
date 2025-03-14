@@ -1,11 +1,12 @@
 import { useState } from "react"
 import "./Signup.css";
 import { useNavigate } from "react-router";
+import API from "../../utils/api";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState  ("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
@@ -13,26 +14,22 @@ export default function SignUp() {
   const signupUser = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setMessage("");
+    setMessage(null);
 
     try {
-      const response = await fetch("http://localhost:5000/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type" : "application/json"
-        },
-        body: JSON.stringify({username, email, password}),
-      });
-      const data = await response.json();
-      console.log(data)
-      if(response.ok){
-        alert(data.message);
+      const response = await API.post("/auth/signup", {
+        username, email, password
+      })
+      const data = response.data;
+      if(response.status === 200){
+        setMessage({text: data.message, type: "success"});
+        setTimeout(() => navigate("/login"), 2000); 
       }
       else{
-        alert(data.message || "Signup failed");
+        setMessage({text: data.message || "Signup Failed", type: "error"});
       }
     } catch (error) {
-      alert("An error occured during signup");
+      setMessage({ text: error.response?.data?.message || "An error occurred during signup", type: "error" });
     } finally {
       setIsSubmitting(false);
     }
@@ -63,6 +60,7 @@ export default function SignUp() {
             name="email"
             placeholder="Mobile Number or Email"
             aria-label="Mobile Number or Email"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -71,6 +69,7 @@ export default function SignUp() {
             name="password"
             placeholder="Password"
             aria-label="Password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
@@ -79,6 +78,7 @@ export default function SignUp() {
             name="username"
             placeholder="Username"
             aria-label="Username"
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />

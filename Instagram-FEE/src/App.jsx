@@ -2,12 +2,13 @@
   import Stories from "./components/Stories";
   import Post from "./components/Post";
   import Contacts from "./components/Contacts";
-  import { useEffect, useState } from "react";
+  import { useEffect, useState, useRef } from "react";
   import { useNavigate } from "react-router";
 
   function App() {  
     const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const hasCheckedToken = useRef(false);
 
     useEffect(() => {
       const checkToken = () => {
@@ -17,20 +18,25 @@
         if(!token || !expiryTime){
           localStorage.removeItem("token");
           localStorage.removeItem("tokenExpiry");
-          navigate("/login");
+          setIsAuthenticated(false);
+          setTimeout(() => navigate("/login"), 100);
           return;
         }
         const currentTime = Date.now();
         if(currentTime >= expiryTime){
           localStorage.removeItem("token");
           localStorage.removeItem("tokenExpiry");
-          navigate("/login");
+          setIsAuthenticated(false);
+          setTimeout(() => navigate("/login"), 100);
         }
         else{
           setIsAuthenticated(true);
         }
       };
-      checkToken();
+      if(!hasCheckedToken.current){
+        checkToken();
+        hasCheckedToken.current = true;
+      }
 
       const interval = setInterval(checkToken, 60000);
 

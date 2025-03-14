@@ -223,6 +223,27 @@
     cursor: pointer;
 }
 
+.message {
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+  .message.success {
+    color: green;
+    background-color: #e6ffe6;
+    border: 1px solid green;
+  }
+  
+  .message.error {
+    color: red;
+    background-color: #ffe6e6;
+    border: 1px solid red;
+  }
+  
+
 @media (max-width: 600px) {
     .signup-box,
     .login-box {
