@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Login.css";
-import { useNavigate } from "react-router";
-import API from "../../utils/api";
+import { resolvePath, useNavigate } from "react-router";
 
 function Login() {
   const [phoneImages, setPhoneImages] = useState({
@@ -42,15 +41,22 @@ function Login() {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const response = await API.post("/auth/login", {email, password});
+    const response = await fetch("http://localhost:5000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    const data = response.data;
-    if (response.status === 200) {
+    const data = await response.json();
+    if (response.ok) {
       localStorage.setItem("token", data.token);
-      localStorage.setItem("tokenExpiry", Date.now() + 3*60*60*1000)
+      localStorage.setItem("tokenExpiry", Date.now() + 3*60*60*1000);
+      localStorage.setItem("cUser", data.user.email);
       navigate("/");
     } else {
-      setError(data.message);
+      alert(data.message);
     }
   } catch (error) {
     setError("An error occurred during login");
@@ -89,7 +95,6 @@ const handleSubmit = async (e) => {
                     type="text"
                     placeholder="Phone number, username, or email"
                     aria-label="Phone number, username, or email"
-                    value={email}
                     onChange={(e)=>setemail(e.target.value)}
                   />
                 </div>
@@ -98,7 +103,6 @@ const handleSubmit = async (e) => {
                     type="password"
                     placeholder="Password"
                     aria-label="Password"
-                    value={password}
                     onChange={(e)=>setpassword(e.target.value)}
                   />
                 </div>

@@ -35,7 +35,11 @@ router.post("/signup", async (req, res) => {
     res.status(201).json({ message: "User registered successfully" });
 
   } catch (error) {
-    res.status(500).json({ message: "Error signing up", error });
+    console.error("Signup error:", error);
+    res.status(500).json({ 
+      message: "Error signing up", 
+      error: error.message
+    });
   }
 });
 
@@ -43,22 +47,47 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: "Invalid email" });
+      return res.status(401).json({ message: "User not found with this email" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid password" });
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
-    const token = jwt.sign({ id: user._id.toString(), email: user.email }, SECRET_KEY, { expiresIn: "3h" });
+    const token = jwt.sign(
+      { 
+        id: user._id.toString(), 
+        email: user.email 
+      }, 
+      SECRET_KEY, 
+      { expiresIn: "3h" }
+    );
 
-    res.json({ message: "Login successful", token, email: user.email, myPost: user.myPost || [] });
+    res.json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+        myPost: user.myPost || [],
+        myReels: user.myReels || []
+      }
+    });
 
   } catch (error) {
-    res.status(500).json({ message: "Login error", error });
+    console.error("Login error:", error);
+    res.status(500).json({ 
+      message: "Login failed", 
+      error: error.message 
+    });
   }
 });
 
