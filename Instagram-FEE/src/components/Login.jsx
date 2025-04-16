@@ -7,8 +7,8 @@ function Login() {
     back: "",
     front: "",
   });
-  const [email,setemail]=useState("");
-  const [password,setpassword] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
   const [error, setError] = useState(null);
   const UNSPLASH_API_KEY = "E0ALOBG92sDBhOmSqp6n0SO4W35_vheYws0pOPB-Peg";
   const UNSPLASH_URL = `https://api.unsplash.com/photos/random?client_id=${UNSPLASH_API_KEY}&count=2`;
@@ -30,7 +30,7 @@ function Login() {
 
   useEffect(() => {
     fetchRandomImages();
- }, []);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -38,30 +38,37 @@ function Login() {
     navigate("/signup");
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await fetch("http://localhost:5000/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:5000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await response.json();
-    if (response.ok) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("tokenExpiry", Date.now() + 3*60*60*1000);
-      localStorage.setItem("cUser", data.user.email);
-      navigate("/");
-    } else {
-      alert(data.message);
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("tokenExpiry", Date.now() + 3 * 60 * 60 * 1000);
+        localStorage.setItem("cUser", data.user.email);
+        localStorage.setItem("role", data.user.role || 'user'); // Add this line
+        navigate("/");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      setError("An error occurred during login");
     }
-  } catch (error) {
-    setError("An error occurred during login");
-  }
-};
+  };
+
+  const handleGuestLogin = (e) => {
+    e.preventDefault();
+    localStorage.setItem("role", "guest");
+    navigate("/");
+  };
 
   return (
     <div className="container">
@@ -95,7 +102,7 @@ const handleSubmit = async (e) => {
                     type="text"
                     placeholder="Phone number, username, or email"
                     aria-label="Phone number, username, or email"
-                    onChange={(e)=>setemail(e.target.value)}
+                    onChange={(e) => setemail(e.target.value)}
                   />
                 </div>
                 <div className="form-field">
@@ -103,7 +110,7 @@ const handleSubmit = async (e) => {
                     type="password"
                     placeholder="Password"
                     aria-label="Password"
-                    onChange={(e)=>setpassword(e.target.value)}
+                    onChange={(e) => setpassword(e.target.value)}
                   />
                 </div>
                 <button type="submit" className="login-button">
@@ -113,6 +120,9 @@ const handleSubmit = async (e) => {
               <div className="divider">
                 <span>OR</span>
               </div>
+              <button className="guest-login-button" onClick={handleGuestLogin}>
+                Continue as Guest
+              </button>
               <button className="facebook-login">
                 <svg
                   className="facebook-icon"
@@ -219,4 +229,4 @@ const handleSubmit = async (e) => {
     </div>
   );
 }
-export default Login ;
+export default Login;

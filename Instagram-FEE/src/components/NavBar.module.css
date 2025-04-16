@@ -64,6 +64,9 @@
     width: 1.1vw;
     height: 2.2vh;
 }
+.nav-login {
+  cursor: pointer;
+}
 .more-set{
     display: flex;
     gap: 10px;
@@ -77,6 +80,11 @@
 }
 .dark-set{
     display: none;
+}
+
+.settings-link {
+    margin-top: auto;  /* This will push the settings link to the bottom */
+    padding-bottom: 20px;
 }
 
 @media screen and (max-width: 1024px) {
@@ -152,6 +160,10 @@
   .nav-threads, 
   .nav-more {
     display: none;
+  }
+
+  .settings-link {
+    padding-bottom: 10px;
   }
 }
 

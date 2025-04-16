@@ -1,6 +1,6 @@
 import styles from './Contacts.module.css';
 
-function Contacts(){
+function Contacts({ role = 'guest' }){
     let suggestions = [
         {
           username: "_itz_singh_28",
@@ -9,56 +9,85 @@ function Contacts(){
         },
       ];
 
-    let uName = localStorage.getItem("cUser");
+    // Only get username if user is logged in
+    let uName = role !== 'guest' ? localStorage.getItem("cUser") : null;
+
     return(
         <div className={styles.contacts}>
             <div className={styles.username}>
-                <img src="/Images/user.png" alt="" />
-                <div className={styles["user-account"]}>
-                    <p>{uName}</p>
-                </div>
-                <a href="#" onClick="toggleLogin()">Switch</a>
-                <div className={styles["modal-background"]} id="modalBackground"></div>
-                <div className={styles["login-modal"]} id="loginModal">
-                    <div className={styles.xIcon}>
-                        <i className="fa-solid fa-xmark" onClick="xicon()"></i>
-                    </div>
-                    <p className={`${styles.namelogo} ${styles["login-insta"]}`}>Instagram</p>
-                    <form action=''> 
-                        <div className={styles.inputs}>
-                            <input type="text" id="username" name="username"
-                                placeholder="Phone number, username, or email" className={styles.inpback} />
-                            <input type="password" id="password" name="password" placeholder="Password" className={styles.inpback} />
-                        </div>
-                        <div className={styles.checking}>
-                            <input type="checkbox" id="checkbox" />
-                            <span>Save login info</span>
-                        </div>
-                    </form>
-                    <div className={styles.logfor}>
-                        <button className={styles.loginbutton}>Log in</button>
-                        <a href="#" className={styles.forgp}>Forgot password?</a>
-                    </div>
-                </div>
-            </div>
-            <div className={styles.suggest}>
-                <p className={styles.suggFor}>Suggested for you</p>
-                <p className={styles.see}>See All</p>
-            </div>
-            <div className={styles.suggestions} id="suggest-container">
-                {suggestions.map((suggest, index)=>(
-                    <div key={index} className={styles["suggestion-1"]}>
-                        <img src={suggest.userPic} alt="userpic" />
-                        <div>
-                            <p className={styles.accounts}>{suggest.username}</p>
-                            <p className={`${styles.followed} ${styles.accounts}`}>Followed by {suggest.follow}</p>
-                        </div>
-                        <div>
-                            <a href="#" onClick="Follow(this)">Follow</a>
+                {role === 'guest' ? (
+                    // Guest user view
+                    <div className={styles["guest-view"]}>
+                        <img src="/Images/user.png" alt="" />
+                        <div className={styles["user-account"]}>
+                            <p>Guest User</p>
+                            <small>Please login to access all features</small>
                         </div>
                     </div>
-                ))}
+                ) : (
+                    // Logged in user view
+                    <>
+                        <img src="/Images/user.png" alt="" />
+                        <div className={styles["user-account"]}>
+                            <p>{uName}</p>
+                        </div>
+                        <a href="#" onClick="toggleLogin()">Switch</a>
+                    </>
+                )}
+                
+                {/* Login modal - only show for logged in users */}
+                {role !== 'guest' && (
+                    <>
+                        <div className={styles["modal-background"]} id="modalBackground"></div>
+                        <div className={styles["login-modal"]} id="loginModal">
+                            <div className={styles.xIcon}>
+                                <i className="fa-solid fa-xmark" onClick="xicon()"></i>
+                            </div>
+                            <p className={`${styles.namelogo} ${styles["login-insta"]}`}>Instagram</p>
+                            <form action=''> 
+                                <div className={styles.inputs}>
+                                    <input type="text" id="username" name="username"
+                                        placeholder="Phone number, username, or email" className={styles.inpback} />
+                                    <input type="password" id="password" name="password" placeholder="Password" className={styles.inpback} />
+                                </div>
+                                <div className={styles.checking}>
+                                    <input type="checkbox" id="checkbox" />
+                                    <span>Save login info</span>
+                                </div>
+                            </form>
+                            <div className={styles.logfor}>
+                                <button className={styles.loginbutton}>Log in</button>
+                                <a href="#" className={styles.forgp}>Forgot password?</a>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
+
+            {/* Only show suggestions for logged in users */}
+            {role !== 'guest' && (
+                <>
+                    <div className={styles.suggest}>
+                        <p className={styles.suggFor}>Suggested for you</p>
+                        <p className={styles.see}>See All</p>
+                    </div>
+                    <div className={styles.suggestions} id="suggest-container">
+                        {suggestions.map((suggest, index)=>(
+                            <div key={index} className={styles["suggestion-1"]}>
+                                <img src={suggest.userPic} alt="userpic" />
+                                <div>
+                                    <p className={styles.accounts}>{suggest.username}</p>
+                                    <p className={`${styles.followed} ${styles.accounts}`}>Followed by {suggest.follow}</p>
+                                </div>
+                                <div>
+                                    <a href="#" onClick="Follow(this)">Follow</a>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </>
+            )}
+
             <div className={styles.about}>
                 <div className={styles["about-topics"]}>
                     <p onClick="footabout()">About</p>

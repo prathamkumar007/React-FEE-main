@@ -176,6 +176,22 @@
   background-color: #1877f2;
 }
 
+.guest-login-button {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #385185;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 8px 0;
+  padding: 7px 16px;
+}
+
+.guest-login-button:hover {
+  color: #1877f2;
+}
+
 .divider {
   display: flex;
   align-items: center;

@@ -7,6 +7,8 @@ import Reels from './Pages/Reels.jsx'
 import Login from './components/Login.jsx'
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import SignUp from './components/SignUp.jsx'
+import AdminDashboard from './Pages/AdminDashboard.jsx'
+import Settings from './Pages/Settings.jsx'
 
 const routes = [
   {
@@ -29,7 +31,14 @@ const routes = [
     path: "/signup",
     element: <SignUp/>,
   },
-  
+  {
+    path: "/admin",
+    element: <AdminDashboard/>,
+  },
+  {
+    path: "/settings",
+    element: <Settings/>,
+  },
 ];
 
 const router = createBrowserRouter(routes);

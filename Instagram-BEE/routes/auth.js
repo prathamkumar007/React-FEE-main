@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const authenticationToken = require("../middlewares/authMiddleware");
+const checkAdminRole = require("../middlewares/adminMiddleware");
 
 const router = express.Router();
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -51,6 +52,29 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
+    // Check for admin credentials
+    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+      const token = jwt.sign(
+        { 
+          email: process.env.ADMIN_EMAIL,
+          role: 'admin'
+        }, 
+        SECRET_KEY, 
+        { expiresIn: "3h" }
+      );
+
+      return res.json({
+        message: "Admin login successful",
+        token,
+        user: {
+          email: process.env.ADMIN_EMAIL,
+          username: 'Admin',
+          role: 'admin'
+        }
+      });
+    }
+
+    // Regular user login logic
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "User not found with this email" });
@@ -64,7 +88,8 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(
       { 
         id: user._id.toString(), 
-        email: user.email 
+        email: user.email,
+        role: user.role
       }, 
       SECRET_KEY, 
       { expiresIn: "3h" }
@@ -77,6 +102,7 @@ router.post("/login", async (req, res) => {
         id: user._id,
         email: user.email,
         username: user.username,
+        role: user.role,
         myPost: user.myPost || [],
         myReels: user.myReels || []
       }
@@ -88,6 +114,38 @@ router.post("/login", async (req, res) => {
       message: "Login failed", 
       error: error.message 
     });
+  }
+});
+
+// Add admin-only routes
+router.get("/admin/users", authenticationToken, checkAdminRole, async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching users", error });
+  }
+});
+
+router.delete("/admin/users/:id", authenticationToken, checkAdminRole, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userToDelete = await User.findById(id);
+    
+    if (!userToDelete) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Prevent admin from deleting themselves
+    if (userToDelete.email === process.env.ADMIN_EMAIL) {
+      return res.status(403).json({ message: "Cannot delete admin account" });
+    }
+
+    await User.findByIdAndDelete(id);
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Delete error:", error);
+    res.status(500).json({ message: "Error deleting user", error: error.message });
   }
 });
 
@@ -160,6 +218,51 @@ router.delete("/users/:id", authenticationToken, async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error deleting user", error });
   }
+});
+
+router.get("/me", authenticationToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching user details", error });
+  }
+});
+
+router.put("/settings", authenticationToken, async (req, res) => {
+    try {
+        const { privacy } = req.body;
+        
+        // Validate privacy setting
+        if (!['public', 'private'].includes(privacy)) {
+            return res.status(400).json({ message: "Invalid privacy setting" });
+        }
+
+        // Find and update user
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user.id,
+            { privacy },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json({ 
+            message: "Privacy settings updated successfully", 
+            privacy: updatedUser.privacy 
+        });
+    } catch (error) {
+        console.error("Settings update error:", error);
+        res.status(500).json({ 
+            message: "Error updating settings", 
+            error: error.message 
+        });
+    }
 });
 
 module.exports = router;
