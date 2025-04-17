@@ -113,11 +113,15 @@ function NavBar({ role = 'guest' }) {
                 .filter(link => link.roles.includes(role))
                 .map((link, index) => (
                     <div key={index} className={`${styles.topics} ${styles[link.label]}`}>
-                        <img src= {link.lightIcon} alt= {`${link.label} Light Icon`} className='light-icon' />
-                        {link.darkIcon && (
-                            <img src= {link.darkIcon} alt= {`${link.label} Dark Icon`} className= {styles['dark-icon']} />
+                        {link.label !== 'Admin Dashboard' && (
+                            <>
+                                <img src={link.lightIcon} alt={`${link.label} Light Icon`} className='light-icon' />
+                                {link.darkIcon && (
+                                    <img src={link.darkIcon} alt={`${link.label} Dark Icon`} className={styles['dark-icon']} />
+                                )}
+                            </>
                         )}
-                        <Link to={link.to} className= {styles.links}>{link.label}</Link>
+                        <Link to={link.to} className={styles.links}>{link.label}</Link>
                     </div>
                 ))}
             </div>
