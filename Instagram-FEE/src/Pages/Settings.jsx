@@ -8,9 +8,22 @@ function Settings() {
     const [privacy, setPrivacy] = useState('public');
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState('');
+    const [role, setRole] = useState('user'); // Add role state
     const navigate = useNavigate();
 
     useEffect(() => {
+        // First check if user is logged in and get role
+        const token = localStorage.getItem('token');
+        const userRole = localStorage.getItem('role');
+        
+        if (!token || userRole === 'guest') {
+            navigate('/login');
+            return;
+        } else {
+            setRole(userRole || 'user');
+        }
+        
+        // Then fetch user settings
         const fetchUserSettings = async () => {
             try {
                 const response = await API.get('/auth/me');
@@ -21,6 +34,7 @@ function Settings() {
                 navigate('/login');
             }
         };
+        
         fetchUserSettings();
     }, [navigate]);
 
@@ -44,7 +58,7 @@ function Settings() {
 
     return (
         <div>
-            <NavBar />
+            <NavBar role={role} />
             <div className={styles.settingsContainer}>
                 <h2>Privacy Settings</h2>
                 <div className={styles.privacyToggle}>

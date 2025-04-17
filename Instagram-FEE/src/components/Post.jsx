@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../Static/poststyle.css'
 
-function Post() {
+function Post({ role }) {
   const [isGuest, setIsguest] = useState(true);
   const [posts, setPosts] = useState([
     {
@@ -55,11 +55,20 @@ function Post() {
       liked: false,
     },
   ]);
-  const handleLike = (index) => {
-    if(isGuest){
-      alert("You must log in to like posts.")
+
+  useEffect(() => {
+    const userRole = localStorage.getItem('role');
+    if (userRole && userRole !== 'guest') {
+      setIsguest(false);
+    } else {
+      setIsguest(true);
     }
-    else{
+  }, []);
+  
+  const handleLike = (index) => {
+    if(isGuest) {
+      alert("You must log in to like posts.");
+    } else {
       const newPosts = [...posts];
       if(!newPosts[index].liked) {
         newPosts[index].liked = true;
@@ -68,6 +77,7 @@ function Post() {
       }
     }
   }
+
   return (
     <div className="posts">
       {posts.map((post, index) =>(

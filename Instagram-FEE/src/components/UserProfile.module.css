@@ -83,6 +83,20 @@ a{
     display: none;
 }
 
+.privacy-message {
+  margin: 15px 0;
+  padding: 10px 15px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  border-left: 3px solid #3897f0;
+}
+
+.privacy-info {
+  font-size: 0.8rem;
+  color: #8e8e8e;
+  margin-top: 5px;
+}
+
 @media screen and (max-width: 1024px) {
   .users-profile-child {
     margin-left: 8vw;

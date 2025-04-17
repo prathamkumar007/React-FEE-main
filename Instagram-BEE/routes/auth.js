@@ -242,19 +242,20 @@ router.put("/settings", authenticationToken, async (req, res) => {
         }
 
         // Find and update user
-        const updatedUser = await User.findByIdAndUpdate(
-            req.user.id,
-            { privacy },
-            { new: true }
-        );
-
-        if (!updatedUser) {
+        const user = await User.findById(req.user.id);
+        if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
+        
+        // Update privacy setting
+        user.privacy = privacy;
+        await user.save();
+        
+        console.log(`Updated privacy for ${user.email} to: ${user.privacy}`);
+        
         res.json({ 
             message: "Privacy settings updated successfully", 
-            privacy: updatedUser.privacy 
+            privacy: user.privacy 
         });
     } catch (error) {
         console.error("Settings update error:", error);

@@ -48,7 +48,7 @@ function AdminDashboard() {
     return (
         <div>
             <NavBar role="admin" />
-            <div className={styles.dashboard}>
+            <div className={styles.dashboardFull}>
                 <h1>Admin Dashboard</h1>
                 <div className={styles.userList}>
                     <h2>User Management</h2>
@@ -57,7 +57,7 @@ function AdminDashboard() {
                             <tr>
                                 <th>Username</th>
                                 <th>Email</th>
-                                <th>Role</th>
+                                <th>Privacy</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -66,7 +66,7 @@ function AdminDashboard() {
                                 <tr key={user._id}>
                                     <td>{user.username}</td>
                                     <td>{user.email}</td>
-                                    <td>{user.role}</td>
+                                    <td>{user.privacy || 'public'}</td>
                                     <td>
                                         <button 
                                             onClick={() => handleDeleteUser(user._id)}

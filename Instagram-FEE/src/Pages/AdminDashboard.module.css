@@ -4,6 +4,13 @@
     margin-top: 20px;
 }
 
+.dashboardFull {
+    padding: 20px;
+    margin: 60px auto;
+    max-width: 1200px;
+    width: 90%;
+}
+
 .userList {
     margin-top: 20px;
     background: white;

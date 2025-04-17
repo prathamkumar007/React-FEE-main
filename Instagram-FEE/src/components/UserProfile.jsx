@@ -1,7 +1,29 @@
+import { useState, useEffect } from "react";
 import styles from "./UserProfile.module.css";
+import API from "../../utils/api";
 
 function UserProfile() {
+  const [userPrivacy, setUserPrivacy] = useState('public');
+  const [loading, setLoading] = useState(true);
+  
   let cUser = localStorage.getItem("cUser");
+  
+  useEffect(() => {
+    const fetchUserPrivacy = async () => {
+      try {
+        const response = await API.get('/auth/me');
+        setUserPrivacy(response.data.privacy || 'public');
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching privacy settings:', error);
+        setLoading(false);
+      }
+    };
+    
+    fetchUserPrivacy();
+  }, []);
+  
+  if (loading) return <div>Loading...</div>;
   
   return (
     <div className={styles["users-profile-child"]}>
@@ -90,6 +112,12 @@ function UserProfile() {
         <div className={styles.part3}>
           <div className={styles.Name}>
           </div>
+          {userPrivacy === 'private' ? (
+            <div className={styles["privacy-message"]}>
+              <p>This profile is private</p>
+              <p className={styles["privacy-info"]}>Only approved followers can see posts and activity</p>
+            </div>
+          ) : null}
           <div className={styles["threads-account"]}>
             <button className={styles["thread-btn"]}>
               <img
