@@ -52,7 +52,6 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    // Check for admin credentials
     if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
       const token = jwt.sign(
         { 
@@ -73,8 +72,6 @@ router.post("/login", async (req, res) => {
         }
       });
     }
-
-    // Regular user login logic
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "User not found with this email" });
@@ -117,7 +114,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Add admin-only routes
 router.get("/admin/users", authenticationToken, checkAdminRole, async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -136,7 +132,6 @@ router.delete("/admin/users/:id", authenticationToken, checkAdminRole, async (re
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Prevent admin from deleting themselves
     if (userToDelete.email === process.env.ADMIN_EMAIL) {
       return res.status(403).json({ message: "Cannot delete admin account" });
     }
@@ -236,18 +231,15 @@ router.put("/settings", authenticationToken, async (req, res) => {
     try {
         const { privacy } = req.body;
         
-        // Validate privacy setting
         if (!['public', 'private'].includes(privacy)) {
             return res.status(400).json({ message: "Invalid privacy setting" });
         }
 
-        // Find and update user
         const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
         
-        // Update privacy setting
         user.privacy = privacy;
         await user.save();
         
