@@ -10,14 +10,16 @@ function Profile(){
     const navigate = useNavigate();
 
     useEffect(() => {
-        const userRole = localStorage.getItem('role');
         const token = localStorage.getItem('token');
+        const userRole = localStorage.getItem('role');
         
-        if (!token || userRole === 'guest') {
+        // Only redirect if no role set OR role is guest AND no token
+        if (!userRole || (userRole === 'guest' && !token)) {
             navigate('/login');
-        } else {
-            setRole(userRole || 'user');
+            return;
         }
+        
+        setRole(userRole || 'user');
     }, [navigate]);
 
     if (!role) return null;

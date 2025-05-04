@@ -11,8 +11,13 @@ function UserProfile() {
   useEffect(() => {
     const fetchUserPrivacy = async () => {
       try {
-        const response = await API.get('/auth/me');
-        setUserPrivacy(response.data.privacy || 'public');
+        const email = localStorage.getItem("cUser");
+        const response = await API.get('/auth/users');
+        const userData = response.data.find(user => user.email === email);
+        if (userData) {
+          setUserPrivacy(userData.privacy || 'public');
+          localStorage.setItem('privacy', userData.privacy || 'public');
+        }
         setLoading(false);
       } catch (error) {
         console.error('Error fetching privacy settings:', error);
@@ -129,6 +134,12 @@ function UserProfile() {
               <div className={styles["thread-p"]}>{cUser}</div>
             </button>
           </div>
+          {userPrivacy === 'private' && (
+            <div className={styles["privacy-badge"]}>
+              <i className="fas fa-lock"></i>
+              <span>Private Account</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

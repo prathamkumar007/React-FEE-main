@@ -1,13 +1,9 @@
 require("dotenv").config();
 const express = require("express");
 const bcrypt = require('bcrypt');
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const authenticationToken = require("../middlewares/authMiddleware");
-const checkAdminRole = require("../middlewares/adminMiddleware");
 
 const router = express.Router();
-const SECRET_KEY = process.env.SECRET_KEY;
 const saltRounds = 10;
 
 router.post("/signup", async (req, res) => {
@@ -33,7 +29,14 @@ router.post("/signup", async (req, res) => {
     });
 
     await newUser.save();
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ 
+      message: "User registered successfully",
+      user: {
+        email: newUser.email,
+        username: newUser.username,
+        role: newUser.role
+      }
+    });
 
   } catch (error) {
     console.error("Signup error:", error);
@@ -53,18 +56,8 @@ router.post("/login", async (req, res) => {
     }
 
     if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-      const token = jwt.sign(
-        { 
-          email: process.env.ADMIN_EMAIL,
-          role: 'admin'
-        }, 
-        SECRET_KEY, 
-        { expiresIn: "3h" }
-      );
-
       return res.json({
         message: "Admin login successful",
-        token,
         user: {
           email: process.env.ADMIN_EMAIL,
           username: 'Admin',
@@ -72,6 +65,7 @@ router.post("/login", async (req, res) => {
         }
       });
     }
+
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "User not found with this email" });
@@ -82,19 +76,8 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Incorrect password" });
     }
 
-    const token = jwt.sign(
-      { 
-        id: user._id.toString(), 
-        email: user.email,
-        role: user.role
-      }, 
-      SECRET_KEY, 
-      { expiresIn: "3h" }
-    );
-
     res.json({
       message: "Login successful",
-      token,
       user: {
         id: user._id,
         email: user.email,
@@ -114,7 +97,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/admin/users", authenticationToken, checkAdminRole, async (req, res) => {
+router.get("/admin/users", async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.json(users);
@@ -123,7 +106,7 @@ router.get("/admin/users", authenticationToken, checkAdminRole, async (req, res)
   }
 });
 
-router.delete("/admin/users/:id", authenticationToken, checkAdminRole, async (req, res) => {
+router.delete("/admin/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const userToDelete = await User.findById(id);
@@ -144,7 +127,7 @@ router.delete("/admin/users/:id", authenticationToken, checkAdminRole, async (re
   }
 });
 
-router.get("/users", authenticationToken, async (req, res) => {
+router.get("/users", async (req, res) => {
   try {
     const data = await User.find().select("-password");
     res.json(data);
@@ -153,7 +136,7 @@ router.get("/users", authenticationToken, async (req, res) => {
   }
 });
 
-router.get("/users/:id", authenticationToken, async (req, res) => {
+router.get("/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id).select("-password");
@@ -168,7 +151,7 @@ router.get("/users/:id", authenticationToken, async (req, res) => {
   }
 });
 
-router.put("/users/:id", authenticationToken, async (req, res) => {
+router.put("/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { username, email, password } = req.body;
@@ -194,7 +177,7 @@ router.put("/users/:id", authenticationToken, async (req, res) => {
   }
 });
 
-router.delete("/users/:id", authenticationToken, async (req, res) => {
+router.delete("/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -215,9 +198,10 @@ router.delete("/users/:id", authenticationToken, async (req, res) => {
   }
 });
 
-router.get("/me", authenticationToken, async (req, res) => {
+router.get("/me/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const { id } = req.params;
+    const user = await User.findById(id).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -227,15 +211,16 @@ router.get("/me", authenticationToken, async (req, res) => {
   }
 });
 
-router.put("/settings", authenticationToken, async (req, res) => {
+router.put("/settings/:id", async (req, res) => {
     try {
+        const { id } = req.params;
         const { privacy } = req.body;
         
         if (!['public', 'private'].includes(privacy)) {
             return res.status(400).json({ message: "Invalid privacy setting" });
         }
 
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -243,14 +228,11 @@ router.put("/settings", authenticationToken, async (req, res) => {
         user.privacy = privacy;
         await user.save();
         
-        console.log(`Updated privacy for ${user.email} to: ${user.privacy}`);
-        
         res.json({ 
             message: "Privacy settings updated successfully", 
             privacy: user.privacy 
         });
     } catch (error) {
-        console.error("Settings update error:", error);
         res.status(500).json({ 
             message: "Error updating settings", 
             error: error.message 

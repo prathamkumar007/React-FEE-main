@@ -80,8 +80,6 @@ function NavBar({ role = 'guest' }) {
 
     const handleLogout = (e) =>{
         e.stopPropagation();
-        localStorage.removeItem("token");
-        localStorage.removeItem("tokenExpiry");
         localStorage.removeItem("role");
         localStorage.removeItem("cUser");
         navigate("/login");

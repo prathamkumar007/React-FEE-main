@@ -13,15 +13,19 @@ function ProfilePost() {
   useEffect(() => {
     async function fetchUserPrivacy() {
       try {
-        const token = localStorage.getItem("token");
-        const response = await API.get("/auth/me");
-        setPrivacy(response.data.privacy || 'public');
-        setLoading(false);
+        const usersResponse = await API.get("/auth/users");
+        const email = localStorage.getItem("cUser");
+        const userData = usersResponse.data.find(user => user.email === email);
         
-        // Only fetch posts if profile is public
-        if (response.data.privacy !== 'private') {
-          fetchUserPosts();
-          fetchReels();
+        if (userData) {
+          setPrivacy(userData.privacy || 'public');
+          setLoading(false);
+          
+          // Only fetch posts if profile is public or it's the user's own profile
+          if (userData.privacy === 'public' || userData.email === email) {
+            await fetchUserPosts();
+            await fetchReels();
+          }
         }
       } catch (error) {
         console.error("Error fetching user privacy:", error);

@@ -11,40 +11,22 @@ function App() {
   const hasCheckedToken = useRef(false);
 
   useEffect(() => {
-    const checkToken = async () => {
-      const token = localStorage.getItem("token");
-      const expiryTime = localStorage.getItem("tokenExpiry");
+    const checkAuth = () => {
+      // Checks localStorage for saved role
       const storedRole = localStorage.getItem("role");
-
-      if (!token || !expiryTime) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("tokenExpiry");
-        localStorage.removeItem("role");
-        setRole("guest");
-        return;
-      }
-
-      const currentTime = Date.now();
-      if (currentTime >= expiryTime) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("tokenExpiry");
-        localStorage.removeItem("role");
-        setRole("guest");
-      } else {
-        setRole(storedRole || "user");
-      }
+      // If no role found, defaults to "guest"
+      setRole(storedRole || "guest");
     };
 
+    // Only runs check once when component mounts
     if (!hasCheckedToken.current) {
-      checkToken();
+      checkAuth();
       hasCheckedToken.current = true;
     }
-
-    const interval = setInterval(checkToken, 60000);
-    return () => clearInterval(interval);
   }, [navigate]);
 
-  if (role === null) return null; // Wait until token check completes
+  // Prevents rendering until role is determined
+  if (role === null) return null;
 
   return (
     <div className="container">

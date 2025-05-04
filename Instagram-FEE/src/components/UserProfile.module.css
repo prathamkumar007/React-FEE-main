@@ -97,6 +97,19 @@ a{
   margin-top: 5px;
 }
 
+.privacy-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: #8e8e8e;
+  font-size: 14px;
+}
+
+.privacy-badge i {
+  font-size: 12px;
+}
+
 @media screen and (max-width: 1024px) {
   .users-profile-child {
     margin-left: 8vw;

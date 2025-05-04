@@ -51,10 +51,9 @@ function Login() {
 
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("tokenExpiry", Date.now() + 3 * 60 * 60 * 1000);
         localStorage.setItem("cUser", data.user.email);
-        localStorage.setItem("role", data.user.role || 'user'); // Add this line
+        localStorage.setItem("role", data.user.role || 'user');
+        localStorage.setItem("userId", data.user.id); // Add this line
         navigate("/");
       } else {
         alert(data.message);

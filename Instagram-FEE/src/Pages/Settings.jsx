@@ -7,31 +7,32 @@ import API from '../../utils/api';
 function Settings() {
     const [privacy, setPrivacy] = useState('public');
     const [loading, setLoading] = useState(true);
-    const [message, setMessage] = useState('');
-    const [role, setRole] = useState('user'); // Add role state
+    const [message, setMessage] = useState({ text: '', type: '' });  // Change message state to object
+    const [role, setRole] = useState('user');
     const navigate = useNavigate();
 
     useEffect(() => {
-        // First check if user is logged in and get role
         const token = localStorage.getItem('token');
         const userRole = localStorage.getItem('role');
+        const email = localStorage.getItem('cUser');
         
-        if (!token || userRole === 'guest') {
+        if (!userRole || userRole === 'guest') {
             navigate('/login');
             return;
-        } else {
-            setRole(userRole || 'user');
         }
+
+        setRole(userRole);
         
-        // Then fetch user settings
         const fetchUserSettings = async () => {
             try {
-                const response = await API.get('/auth/me');
-                setPrivacy(response.data.privacy || 'public');
+                const response = await API.get('/auth/users');
+                const userData = response.data.find(user => user.email === email);
+                if (userData) {
+                    setPrivacy(userData.privacy || 'public');
+                }
                 setLoading(false);
             } catch (error) {
-                console.error('Error fetching settings:', error);
-                navigate('/login');
+                setLoading(false);
             }
         };
         
@@ -41,20 +42,45 @@ function Settings() {
     const handlePrivacyChange = async (newPrivacy) => {
         try {
             setLoading(true);
-            const response = await API.put('/auth/settings', { privacy: newPrivacy });
-            if (response.data.privacy) {
-                setPrivacy(response.data.privacy);
-                setMessage('Privacy settings updated successfully');
+            const email = localStorage.getItem('cUser');
+            const usersResponse = await API.get('/auth/users');
+            const userData = usersResponse.data.find(user => user.email === email);
+            
+            if (!userData) {
+                throw new Error('User not found');
             }
+
+            await API.put(`/auth/settings/${userData._id}`, { 
+                privacy: newPrivacy 
+            });
+            
+            setPrivacy(newPrivacy);
+            setMessage({ 
+                text: `Profile privacy updated to ${newPrivacy}`, 
+                type: 'success' 
+            });
+            localStorage.setItem('privacy', newPrivacy);
+            
         } catch (error) {
-            console.error('Privacy update error:', error);
-            setMessage(error.response?.data?.message || 'Failed to update privacy settings');
+            setMessage({ 
+                text: error.response?.data?.message || 'Failed to update privacy settings',
+                type: 'error'
+            });
         } finally {
             setLoading(false);
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) {
+        return (
+            <div>
+                <NavBar role={role} />
+                <div className={styles.settingsContainer}>
+                    <h2>Loading settings...</h2>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -83,7 +109,11 @@ function Settings() {
                         Private Profile
                     </label>
                 </div>
-                {message && <p className={styles.message}>{message}</p>}
+                {message.text && (
+                    <div className={`${styles.message} ${styles[message.type]}`}>
+                        {message.text}
+                    </div>
+                )}
             </div>
         </div>
     );
