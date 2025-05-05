@@ -6,21 +6,30 @@ require("dotenv").config();
 const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/post");
 const reelRoutes = require("./routes/reels");
+const storyRoutes = require("./routes/story");
+const uploadRoutes = require("./routes/uploadPost");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/instagram_clone";
 
+// Connect MongoDB
 mongoose
-    .connect(MONGO_URI)
-    .then(() => console.log("MongoDB connected successfully"))
-    .catch((err) => console.error("MongoDB connection error: ", err));
+  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch((err) => console.error("MongoDB connection error: ", err));
 
+// Middleware
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" }));
+app.use(express.static('public'));
 
+// Routes
 app.use("/auth", authRoutes);
 app.use("/post", postRoutes);
 app.use("/reels", reelRoutes);
+app.use("/story", storyRoutes);
+app.use("/upload", uploadRoutes); // Use /upload to post image-only content
 
+// Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

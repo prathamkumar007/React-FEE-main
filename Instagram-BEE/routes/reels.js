@@ -1,49 +1,58 @@
 const express = require("express");
 const router = express.Router();
-const { readReels, writeReels } = require("../utils/fileUtils");
+const Reel = require('../models/Reels');
 
-router.post("/", async (req, res) => {
-  const { number, videoPath } = req.body;
-  if (!number || !videoPath){
-    return res.status(400).json({ message: "Number and videoPath are required" });
+router.post('/add', async (req, res) => {
+  const { 
+    userId, 
+    profileImage, 
+    accountName,
+    videoUrl, 
+    likes, 
+    comment, 
+    shares        
+  } = req.body;
+
+  if (!userId || !videoUrl || !profileImage || !accountName) {
+    return res.status(400).json({ message: "All fields are required" });
   }
 
-  let reels = await readReels();
-  reels[number] = videoPath;
-  await writeReels(reels);
-  res.status(201).json({ message: "Reel added successfully!" });
-});
-
-router.get("/", async(req, res) => {
-  const data = await readReels();
-  res.json(data);
-})
-
-router.get("/:number", async (req, res) => {
-  const number = req.params.number;
-  const data = await readReels();
-  if (data[number]) {
-    res.send(data[number]);
-  } else {
-    res.status(404).send("Reel not found");
+  try {
+    const newReel = new Reel({
+      userId,
+      profileImage,
+      accountName,
+      videoUrl,
+      likes: likes || 0,
+      comment: comment || [],
+      shares: shares || 0,
+    });
+    await newReel.save();
+    res.status(201).json({ message: 'Reel created successfully', reel: newReel });
+  } catch (err) {
+    res.status(500).json({ error: 'Could not save reel', details: err.message });
   }
 });
 
-router.put("/:number", async (req, res) => {
-  const number = req.params.number;
-  const { videoPath } = req.body;
-  const reels = await readReels();
-  reels[number] = videoPath;
-  await writeReels(reels);
-  res.json({ message: "Reel updated successfully" });
+router.get("/", async (req, res) => {
+  try {
+    const reels = await Reel.find();
+    res.json(reels);
+  } catch (err) {
+    res.status(500).json({ error: "Could not fetch reels", details: err.message });
+  }
 });
 
-router.delete("/:number", async (req, res) => {
-  const number = req.params.number;
-  const reels = await readReels();
-  delete reels[number];
-  await writeReels(reels);
-  res.json({ message: "Reel deleted successfully" });
+router.get("/:id", async (req, res) => {
+  try {
+    const reel = await Reel.findById(req.params.id);
+    
+    if (!reel) return res.status(404).json({ message: "Reel not found" });
+    
+    res.json(reel);
+  } catch (err) {
+    res.status(500).json({ error: "Could not fetch reel", details: err.message });
+  }
 });
 
 module.exports = router;

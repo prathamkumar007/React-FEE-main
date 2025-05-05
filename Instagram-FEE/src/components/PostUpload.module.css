@@ -1,0 +1,84 @@
+.uploadContainer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.uploadInput {
+  flex: 1;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #dbdbdb;
+  font-size: 14px;
+  height: 36px;
+}
+
+.uploadButton {
+  padding: 8px 16px;
+  background-color: #0095f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  height: 36px;
+  min-width: 100px;
+  transition: background-color 0.2s;
+}
+
+.uploadButton:hover {
+  background-color: #0085e0;
+}
+
+.uploadButton:disabled {
+  background-color: #b3dbff;
+  cursor: not-allowed;
+}
+
+.imagePreview {
+  width: 100%;
+  max-width: 300px;
+  max-height: 250px;
+  object-fit: contain;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: 1px solid #dbdbdb;
+}
+
+.previewContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.previewContainer button {
+  margin-top: 8px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+@media screen and (max-width: 480px) {
+  .uploadContainer {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .uploadInput, .uploadButton {
+    width: 100%;
+  }
+  
+  .imagePreview {
+    max-width: 100%;
+    max-height: 200px;
+  }
+}

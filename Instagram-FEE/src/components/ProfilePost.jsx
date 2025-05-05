@@ -1,155 +1,148 @@
 import { useEffect, useState } from "react";
 import styles from "./ProfilePost.module.css";
-import API from "../../utils/api";
+import axios from 'axios';
+import PostUpload from "./PostUpload";
+import { FaLock } from 'react-icons/fa';
 
-function ProfilePost() {
-  const [imageUrls, setImageUrls] = useState([]);
-  const [videoUrl, setVideoUrl] = useState([]);
-  const [privacy, setPrivacy] = useState('public');
+function ProfilePost({ profileEmail }) {
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(false);
+  const [userPrivacy, setUserPrivacy] = useState('public');
 
-  let cUser = localStorage.getItem("cUser");
+  const currentUserEmail = localStorage.getItem("cUser");
+
+  const targetUserEmail = profileEmail || currentUserEmail;
+
+  const isOwnProfile = targetUserEmail === currentUserEmail;
 
   useEffect(() => {
-    async function fetchUserPrivacy() {
+    async function fetchUserData() {
       try {
-        const usersResponse = await API.get("/auth/users");
-        const email = localStorage.getItem("cUser");
-        const userData = usersResponse.data.find(user => user.email === email);
-        
-        if (userData) {
-          setPrivacy(userData.privacy || 'public');
-          setLoading(false);
-          
-          // Only fetch posts if profile is public or it's the user's own profile
-          if (userData.privacy === 'public' || userData.email === email) {
-            await fetchUserPosts();
-            await fetchReels();
+        const response = await axios.get("http://localhost:5000/auth/users");
+        const currentUser = response.data.find(
+          (user) => user.email === currentUserEmail
+        );
+
+        if (currentUser) {
+          setUserPrivacy(currentUser.privacy || 'public');
+          if (currentUser.privacy === 'public') {
+            await fetchUserPosts(currentUser.myPost);
+          } else {
+            setPosts([]);
+            
+            return (
+              <div className={styles["private-profile"]}>
+                <FaLock className={styles["lock-icon"]} />
+                <h3>This Account is Private</h3>
+                <p>Only you can see your posts when your account is private.</p>
+              </div>
+            );
           }
         }
       } catch (error) {
-        console.error("Error fetching user privacy:", error);
+        console.error("Error fetching user data:", error);
+      } finally {
         setLoading(false);
       }
     }
 
-    async function fetchUserPosts() {
+    async function fetchUserPosts(postIds = []) {
       try {
-        const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/auth/users", {
-          headers: {
-            Authorization : `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
-        const data = await response.json();
-        const user = data.find((user) => user.email === cUser);
-        if (user) {
-          const postIds = user.myPost.flat();
-          fetchPostImages(postIds);
+        const fetchedPosts = [];
+        
+        if (postIds.length === 0) {
+          setPosts([]);
+          return;
         }
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    }
-
-    async function fetchPostImages(postIds) {
-      try {
-        const urls = await Promise.all(
-          postIds.map(async (id) => {
-            const res = await fetch(`http://localhost:5000/post/${id}`);
-            const data = await res.text();
-            return data;
-          })
-        );
-        setImageUrls(urls);
+        
+        for (const id of postIds) {
+          if (!id) continue;
+          
+          try {
+            const res = await axios.get(`http://localhost:5000/post/${id}`);
+            if (res.data && res.data.imageUrl) {
+              fetchedPosts.push(res.data);
+            }
+          } catch (err) {
+            console.error(`Error fetching post ${id}:`, err);
+          }
+        }
+        setPosts(fetchedPosts);
       } catch (error) {
         console.error("Error fetching post images:", error);
+        setPosts([]); 
       }
     }
 
-    async function fetchReels() {
+    fetchUserData();
+  }, [currentUserEmail, refresh]);
+
+  const handlePostUploaded = () => {
+    setRefresh((prev) => !prev);
+  };
+
+  const handleDeletePost = async (postId) => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
       try {
-        const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/auth/users", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          }
+        const response = await axios.delete(`http://localhost:5000/post/${postId}`, {
+          params: { email: currentUserEmail }
         });
-        const data = await response.json();
-
-        const user = data.find((user) => user.email == cUser);
-        if (user) {
-          const reelsIds = user.myReels.flat();
-          fetchReelVideos(reelsIds);
+        
+        alert("Post deleted successfully");
+        setRefresh((prev) => !prev);
+      } catch (err) {
+        console.error("Error deleting post:", err);
+        
+        if (err.response) {
+          console.error("Response status:", err.response.status);
+          console.error("Response data:", err.response.data);
         }
-      } catch (error) {
-        console.error("Error fetching reels:", error);
+        
+        alert("Failed to delete post. Please check the console for details.");
       }
     }
-
-    async function fetchReelVideos(reelsIds) {
-      try {
-        const urls = await Promise.all(
-          reelsIds.map(async (id) => {
-            const res = await fetch(`http://localhost:5000/reels/${id}`);
-            const data = await res.text();
-            return data;
-          })
-        );
-        setVideoUrl(urls);
-      } catch (error) {
-        console.error("Error fetching reel videos:", error);
-      }
-    }
-
-    fetchUserPrivacy();
-  }, [cUser]);
+  };
 
   if (loading) return <div>Loading...</div>;
 
+  if (userPrivacy === 'private' && !isOwnProfile) {
+    return (
+      <div className={styles["private-profile"]}>
+        <FaLock className={styles["lock-icon"]} />
+        <h3>This Account is Private</h3>
+        <p>Only you can see your posts when your account is private.</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.share}>
-      <hr />
-      <div className={styles["share-1"]}>
-        <div className={styles.Posts}>
-          <img src="/Images/profile.png" alt="" className={styles["light-set"]} />
-          <img src="/Images/darkProfile.png" alt="" className={styles["dark-set"]} />
-          <p className={styles["share-p"]}>POSTS</p>
-        </div>
-
-        <div className={styles.Posts}>
-          <img src="/Images/save-instagram.png" alt="" className={styles["light-set"]} />
-          <img src="/Images/darkSave.png" alt="" className={styles["dark-set"]} />
-          <p className={styles["share-p"]}>SAVED</p>
-        </div>
-
-        <div className={styles.Posts}>
-          <img src="/Images/comment.png" alt="" className={styles["light-set"]} />
-          <img src="/Images/darkTag.png" alt="" className={styles["dark-set"]} />
-          <p className={styles["share-p"]}>TAGGED</p>
-        </div>
-      </div>
-
-      {privacy === 'private' ? (
-        <div className={styles["private-profile"]}>
-          <div className={styles["lock-icon"]}>
-            <i className="fas fa-lock"></i>
-          </div>
-          <h3>This Account is Private</h3>
-          <p>Follow this account to see their photos and videos.</p>
-        </div>
-      ) : (
-        <div className={styles["share-2"]}>
-          {imageUrls.map((url, index) => (
-            <img key={index} src={url} alt={`Post ${index}`} />
-          ))}
-          {videoUrl.map((url, index) => (
-            <video key={index} src={url} controls></video>
-          ))}
+      {isOwnProfile && (
+        <div style={{ margin: "20px 0" }}>
+          <PostUpload email={currentUserEmail} onPostUploaded={handlePostUploaded} />
         </div>
       )}
+
+      <div className={styles["share-2"]}>
+        {posts.length === 0 ? (
+          <p className={styles["no-posts"]}>No posts to show</p>
+        ) : (
+          posts.map((post, index) => (
+            <div key={index} className={styles["post-container"]}>
+              <img src={post.imageUrl} alt={`Post ${index}`} />
+              {isOwnProfile && (
+                <button 
+                  onClick={() => handleDeletePost(post._id)} 
+                  className={styles["delete-btn"]}
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }
