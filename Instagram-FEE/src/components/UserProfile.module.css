@@ -110,6 +110,32 @@ a{
   font-size: 12px;
 }
 
+.follow-btn {
+  background-color: #0095f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.follow-btn.following {
+  background-color: #efefef;
+  color: #262626;
+  border: 1px solid #dbdbdb;
+}
+
+.follow-btn:hover {
+  background-color: #0085e0;
+}
+
+.follow-btn.following:hover {
+  background-color: #dbdbdb;
+}
+
 @media screen and (max-width: 1024px) {
   .users-profile-child {
     margin-left: 8vw;

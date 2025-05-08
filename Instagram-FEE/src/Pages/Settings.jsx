@@ -12,12 +12,11 @@ function Settings() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
         const userRole = localStorage.getItem('role');
-        const email = localStorage.getItem('cUser');
+        const currentUser = localStorage.getItem('cUser');
         
-        if (!userRole || userRole === 'guest') {
-            navigate('/login');
+        if (!userRole || !currentUser) {
+            navigate('/');
             return;
         }
 
@@ -26,7 +25,7 @@ function Settings() {
         const fetchUserSettings = async () => {
             try {
                 const response = await API.get('/auth/users');
-                const userData = response.data.find(user => user.email === email);
+                const userData = response.data.find(user => user.email === currentUser);
                 if (userData) {
                     setPrivacy(userData.privacy || 'public');
                 }

@@ -9,19 +9,41 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import SignUp from './components/SignUp.jsx'
 import AdminDashboard from './Pages/AdminDashboard.jsx'
 import Settings from './Pages/Settings.jsx'
+import UserDiscovery from './Pages/UserDiscovery.jsx'
+import PrivateRoute from './components/PrivateRoute'
 
 const routes = [
   {
     path: "/",
-    element: <App/>,
+    element: <Login />,
+  },
+  {
+    path: "/home",
+    element: <App />,
+  },
+  {
+    path: "/profile/:email",
+    element: <Profile />,
   },
   {
     path: "/profile",
-    element: <Profile/>,
+    element: <Profile />,
   },
   {
     path: "/reels",
-    element: <Reels/>,
+    element: <PrivateRoute><Reels/></PrivateRoute>,
+  },
+  {
+    path: "/discover",
+    element: <PrivateRoute><UserDiscovery/></PrivateRoute>,
+  },
+  {
+    path: "/settings",
+    element: <PrivateRoute><Settings/></PrivateRoute>,
+  },
+  {
+    path: "/admin",
+    element: <PrivateRoute><AdminDashboard/></PrivateRoute>,
   },
   {
     path: "/login",
@@ -30,14 +52,6 @@ const routes = [
   {
     path: "/signup",
     element: <SignUp/>,
-  },
-  {
-    path: "/admin",
-    element: <AdminDashboard/>,
-  },
-  {
-    path: "/settings",
-    element: <Settings/>,
   },
 ];
 

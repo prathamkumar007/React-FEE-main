@@ -139,7 +139,10 @@ router.get("/users", async (req, res) => {
 router.get("/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id).select("-password");
+    const user = await User.findById(id)
+        .select("-password")
+        .populate('followers', 'username email')
+        .populate('following', 'username email');
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -237,6 +240,79 @@ router.put("/settings/:id", async (req, res) => {
             message: "Error updating settings", 
             error: error.message 
         });
+    }
+});
+
+router.post("/follow/:id", async (req, res) => {
+    try {
+        const { followerEmail } = req.body;
+        const targetUserId = req.params.id;
+
+        const follower = await User.findOne({ email: followerEmail });
+        const targetUser = await User.findById(targetUserId);
+
+        if (!follower || !targetUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (follower._id.toString() === targetUserId) {
+            return res.status(400).json({ message: "Cannot follow yourself" });
+        }
+
+        // Check if already following
+        if (follower.following.includes(targetUserId)) {
+            return res.status(400).json({ message: "Already following this user" });
+        }
+
+        // Add to following/followers arrays
+        follower.following.push(targetUserId);
+        targetUser.followers.push(follower._id);
+
+        await follower.save();
+        await targetUser.save();
+
+        res.json({ 
+            message: "Successfully followed user",
+            followerCount: targetUser.followers.length,
+            followingCount: follower.following.length
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: "Error following user", error: error.message });
+    }
+});
+
+router.post("/unfollow/:id", async (req, res) => {
+    try {
+        const { followerEmail } = req.body;
+        const targetUserId = req.params.id;
+
+        const follower = await User.findOne({ email: followerEmail });
+        const targetUser = await User.findById(targetUserId);
+
+        if (!follower || !targetUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Remove from following/followers arrays
+        follower.following = follower.following.filter(
+            id => id.toString() !== targetUserId
+        );
+        targetUser.followers = targetUser.followers.filter(
+            id => id.toString() !== follower._id.toString()
+        );
+
+        await follower.save();
+        await targetUser.save();
+
+        res.json({ 
+            message: "Successfully unfollowed user",
+            followerCount: targetUser.followers.length,
+            followingCount: follower.following.length
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: "Error unfollowing user", error: error.message });
     }
 });
 

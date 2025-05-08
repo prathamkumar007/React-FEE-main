@@ -51,10 +51,14 @@ function Login() {
 
       const data = await response.json();
       if (response.ok) {
+        // Store all necessary user data
         localStorage.setItem("cUser", data.user.email);
         localStorage.setItem("role", data.user.role || 'user');
-        localStorage.setItem("userId", data.user.id); // Add this line
-        navigate("/");
+        localStorage.setItem("userId", data.user.id);
+        localStorage.setItem("token", data.token || 'dummy-token'); // Add this line
+        
+        // Force a page reload to update all components
+        window.location.href = '/home';
       } else {
         alert(data.message);
       }

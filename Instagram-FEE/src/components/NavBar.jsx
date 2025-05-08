@@ -5,64 +5,68 @@ import {Link, useNavigate} from 'react-router-dom'
 function NavBar({ role = 'guest' }) {
     const navigate = useNavigate();
     const [showMore, setShowMore] = useState(false);
+    const currentUser = localStorage.getItem('cUser');
     const moreMenuRef = useRef(null);
+
+    const handleNavigation = (path, label) => {
+        if (label === 'Profile' && currentUser) {
+            navigate(`/profile/${currentUser}`);
+        } else if (label === 'Settings') {
+            navigate('/settings');
+            setShowMore(false);
+        } else {
+            navigate(path);
+        }
+    };
 
     const navLinks = [
         {
             label: 'Home',
-            to: '/',
+            path: '/home',
             roles: ['guest', 'user', 'admin'],
-            lightIcon: '/Images/hut.png',
-            darkIcon: '/Images/darkHome.png'
+            icon: '/Images/hut.png'
         },
         {
             label: 'Reels',
-            to: '/reels',
+            path: '/reels',
             roles: ['guest', 'user', 'admin'],
-            lightIcon: '/Images/reels.png',
-            darkIcon: '/Images/darkReel.png'
+            icon: '/Images/reels.png'
         },
         {
             label: 'Search',
-            to: '/search',
+            path: '/discover',
             roles: ['user', 'admin'],
-            lightIcon: '/Images/search.png',
-            darkIcon: '/Images/darkSearch.png'
+            icon: '/Images/search.png'
         },
         {
             label: 'Messages',
             to: '/messages',
             roles: ['user', 'admin'],
-            lightIcon: '/Images/messenger.png',
-            darkIcon: '/Images/darkMessage.png'
+            icon: '/Images/messenger.png'
         },
         {
             label: 'Create',
             to: '/create',
             roles: ['user', 'admin'],
-            lightIcon: '/Images/tab.png',
-            darkIcon: '/Images/darkCreate.png'
+            icon: '/Images/tab.png'
         },
         {
             label: 'Profile',
-            to: '/profile',
+            path: '/profile',
             roles: ['user', 'admin'],
-            lightIcon: '/Images/user.png',
-            darkIcon: ''
+            icon: '/Images/user.png'
         },
         {
             label: 'Admin Dashboard',
             to: '/admin',
             roles: ['admin'],
-            lightIcon: '/Images/admin.png',
-            darkIcon: '/Images/darkAdmin.png'
+            icon: '/Images/admin.png'
         },
         {
             label: 'Settings',
-            to: '/settings',
+            path: '/settings',
             roles: ['user', 'admin'],
-            lightIcon: '/Images/settings.png',
-            darkIcon: '/Images/darkSettings.png'
+            icon: '/Images/settings.png'
         }
     ];
 
@@ -78,12 +82,16 @@ function NavBar({ role = 'guest' }) {
         setShowMore(prevState => !prevState);
     };
 
-    const handleLogout = (e) =>{
+    const handleLogout = (e) => {
         e.stopPropagation();
+        // Clear all auth data
         localStorage.removeItem("role");
         localStorage.removeItem("cUser");
-        navigate("/login");
-        setShowMore(false);
+        localStorage.removeItem("userId");
+        localStorage.removeItem("token");
+        
+        // Force reload to update all components
+        window.location.href = '/login';
     };
 
     useEffect(() => {
@@ -100,69 +108,80 @@ function NavBar({ role = 'guest' }) {
         }
     }, [showMore]);
 
-    return(
-        <div className={styles.navbar}>
-            <div className={styles["nav-logo"]}>
-                <h2 className={styles.namelogo}>Instagram</h2>   
-                <img src="/Images/instagram.png" alt="" className="light-icon"/>
-            </div>
-            <div className={styles["nav-topics"]}>
-                {navLinks
-                .filter(link => link.roles.includes(role))
-                .map((link, index) => (
-                    <div key={index} className={`${styles.topics} ${styles[link.label]}`}>
-                        {link.label !== 'Admin Dashboard' && (
-                            <>
-                                <img src={link.lightIcon} alt={`${link.label} Light Icon`} className='light-icon' />
-                                {link.darkIcon && (
-                                    <img src={link.darkIcon} alt={`${link.label} Dark Icon`} className={styles['dark-icon']} />
-                                )}
-                            </>
-                        )}
-                        <Link to={link.to} className={styles.links}>{link.label}</Link>
-                    </div>
-                ))}
-            </div>
+    // Add scroll lock when dropdown is open
+    useEffect(() => {
+        if (showMore) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showMore]);
 
-            <div className={`${styles["nav-threads"]} ${styles.topics}`}>
-                <img src="/Images/threads.png" alt="" className="light-icon"/>
-                <img src="/Images/darkThreads.png" alt="" className={styles['dark-icon']}/>
-                <Link className={styles.links}>Threads</Link>
-            </div>
-            {role === "guest" && (
-            <div className={`${styles["nav-login"]} ${styles.topics}`} onClick={() => navigate('/login')}>
-                
-                <span className={styles.links}>Log In</span>
-            </div>
-            )}
-            {role !== "guest" && (
-            <div className={`${styles["nav-more"]} ${styles.topics}`} onClick={toggleMoreMenu}>
-                <img src="/Images/menu.png" alt="" className="light-icon"/>
-                <img src="/Images/darkMenu.png" alt="" className={styles['dark-icon']}/>
-                <Link className={styles.links}>More</Link>
-            </div>
-            )}
-            
-            {showMore && (
-                <div className={`${styles["more-settings"]} ${showMore ? styles.show : ''}`} onClick = {(e) => e.stopPropagation()}
-                ref = {moreMenuRef}>
-                    {moreLinks.map((link, index) => (
-                        <div key={index} className={styles["more-set"]}>
-                            <img src={link.lightIcon} alt={`${link.label} Icon`} className="light-set" />
+    return (
+        <>
+            <div className={styles.navbar}>
+                <div className={styles["nav-logo"]}>
+                    <h2 className={styles.namelogo}>Instagram</h2>   
+                    <img src="/Images/instagram.png" alt="" className="light-icon"/>
+                </div>
+                <div className={styles["nav-topics"]}>
+                    {navLinks
+                    .filter(link => link.roles.includes(role))
+                    .map((link, index) => (
+                        <div 
+                            key={index} 
+                            className={`${styles.topics} ${styles[link.label]}`}
+                            onClick={() => handleNavigation(link.path, link.label)}
+                        >
+                            <img src={link.icon} alt={link.label} className='light-icon' />
                             <span className={styles.links}>{link.label}</span>
                         </div>
                     ))}
-                    <div className={styles["more-set"]}>
-                        <span className={styles.links}>Switch Accounts</span>
-                    </div>
-                    <hr />
-                    <div className={styles["more-set"]} onClick={handleLogout}>
-                        <span className={styles.links}>Log Out</span>
-                    </div>
-                    <hr />
                 </div>
+
+                <div className={`${styles["nav-threads"]} ${styles.topics}`}>
+                    <img src="/Images/threads.png" alt="" className="light-icon"/>
+                    <Link className={styles.links}>Threads</Link>
+                </div>
+                {role === "guest" && (
+                <div className={`${styles["nav-login"]} ${styles.topics}`} onClick={() => navigate('/login')}>
+                    
+                    <span className={styles.links}>Log In</span>
+                </div>
+                )}
+                {role !== "guest" && (
+                <div className={`${styles["nav-more"]} ${styles.topics}`} onClick={toggleMoreMenu}>
+                    <img src="/Images/menu.png" alt="" className="light-icon"/>
+                    <Link className={styles.links}>More</Link>
+                </div>
+                )}
+                
+            </div>
+            {showMore && (
+                <>
+                    <div className={styles.overlay} onClick={() => setShowMore(false)}></div>
+                    <div className={`${styles["more-settings"]} ${styles.show}`} ref={moreMenuRef}>
+                        {moreLinks.map((link, index) => (
+                            <div key={index} className={styles["more-set"]}>
+                                <img src={link.lightIcon} alt={`${link.label} Icon`} className="light-set" />
+                                <span className={styles.links}>{link.label}</span>
+                            </div>
+                        ))}
+                        <div className={styles["more-set"]}>
+                            <span className={styles.links}>Switch Accounts</span>
+                        </div>
+                        <hr />
+                        <div className={styles["more-set"]} onClick={handleLogout}>
+                            <span className={styles.links}>Log Out</span>
+                        </div>
+                        <hr />
+                    </div>
+                </>
             )}
-        </div>
+        </>
     );
 }
 

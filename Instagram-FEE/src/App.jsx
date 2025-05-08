@@ -1,32 +1,34 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Stories from "./components/Stories";
 import Post from "./components/Post";
 import Contacts from "./components/Contacts";
-import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router";
 
 function App() {
-  const navigate = useNavigate();
   const [role, setRole] = useState(null);
-  const hasCheckedToken = useRef(false);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = () => {
-      // Checks localStorage for saved role
-      const storedRole = localStorage.getItem("role");
-      // If no role found, defaults to "guest"
-      setRole(storedRole || "guest");
+      const token = localStorage.getItem('token');
+      const userRole = localStorage.getItem('role');
+      const cUser = localStorage.getItem('cUser');
+
+      if (!token || !cUser) {
+        navigate('/login');
+        return;
+      }
+
+      setRole(userRole || 'user');
+      setLoading(false);
     };
 
-    // Only runs check once when component mounts
-    if (!hasCheckedToken.current) {
-      checkAuth();
-      hasCheckedToken.current = true;
-    }
+    checkAuth();
   }, [navigate]);
 
-  // Prevents rendering until role is determined
-  if (role === null) return null;
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="container">

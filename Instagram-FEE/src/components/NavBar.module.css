@@ -9,12 +9,15 @@
 .navbar{
     line-height: 1.5;
     width: 15%;
-    height: 100%;
+    height: 100vh;
     border-right: 1px solid rgba(128, 128, 128, 0.188);
     padding: 2vw;
     position: fixed;
     top: 0;
     left: 0;
+    background: white;
+    overflow-y: auto;
+    z-index: 100;
 }
 .navbar img{
     width: 12%;
@@ -32,10 +35,29 @@
 }
 .topics{
     display: flex;
-    margin-bottom: 1.7vw;
-    gap: 10px;
-    text-align: center;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+.topics:hover {
+    background-color: #f3f3f3;
+    transform: scale(1.02);
+}
+
+.topics img {
+    width: 23px;
+    height: 23px;
+    object-fit: contain;
+}
+
+.topics .links {
+    font-size: 16px;
+    font-weight: 400;
 }
 
 .admin-dashboard {
@@ -86,34 +108,40 @@
     width: 40vh;
     height: auto;
     display: none;
-    top: 20%;
-    left: 1%;
     position: fixed;
-    z-index: 500;
+    bottom: 10%;
+    left: 1%;
     background-color: white;
     box-shadow: 1px 1px 10px 2px rgb(0, 0, 0, 0.5);
     border-radius: 1vh;
+    z-index: 1000;
+    max-height: 80vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 .more-settings.show{
     display: block;
 }
 .more-settings img{
-    width: 1.1vw;
-    height: 2.2vh;
+    width: 24px;
+    height: 24px;
 }
 .nav-login {
   cursor: pointer;
 }
 .more-set{
+    padding: 12px 16px;
     display: flex;
-    gap: 10px;
     align-items: center;
-    margin-left: 1vw;
+    gap: 10px;
     cursor: pointer;
-    padding-top: 5px;
+    transition: background-color 0.2s;
+}
+.more-set:hover {
+    background-color: #f3f3f3;
 }
 .dark-icon{
-    display: none;
+    display: none !important;
 }
 .dark-set{
     display: none;
@@ -122,6 +150,19 @@
 .settings-link {
     margin-top: auto;  /* This will push the settings link to the bottom */
     padding-bottom: 20px;
+}
+
+.more-settings::-webkit-scrollbar {
+    width: 8px;
+}
+
+.more-settings::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.more-settings::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
 }
 
 @media screen and (max-width: 1024px) {
@@ -193,6 +234,7 @@
   .topics img {
     width: 24px;
     height: 24px;
+    object-fit: contain;
   }
   
   .links {
@@ -302,4 +344,20 @@
   .links {
     font-size: 0.6rem;
   }
+}
+
+/* Add margin to main content to prevent overlap with fixed navbar */
+.container {
+    margin-left: 15%;
+    width: 85%;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    z-index: 99;
 }
