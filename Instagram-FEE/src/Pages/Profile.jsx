@@ -28,7 +28,7 @@ function Profile() {
 
     return (
         <div className="profile-container">
-            <NavBar role={role} key="navbar" /> {/* Add key prop to force re-render */}
+            <NavBar role={role} key="navbar" />
             <div className='users-profile'>
                 <UserProfile profileEmail={email} />
                 <ProfilePost profileEmail={email} />

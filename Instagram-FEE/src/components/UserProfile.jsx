@@ -13,13 +13,11 @@ function UserProfile({ profileEmail }) {
   const [followingCount, setFollowingCount] = useState(0);
   const navigate = useNavigate();
   
-  // Get current user from localStorage
   const currentUser = localStorage.getItem("cUser");
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // If no profileEmail provided and no currentUser, redirect to login
         if (!profileEmail && !currentUser) {
           navigate('/login');
           return;
@@ -35,7 +33,6 @@ function UserProfile({ profileEmail }) {
           setFollowerCount(userData.followers?.length || 0);
           setFollowingCount(userData.following?.length || 0);
           
-          // Check if current user is following this profile
           const currentUserData = response.data.find(u => u.email === currentUser);
           if (currentUserData) {
             setIsFollowing(currentUserData.following.includes(userData._id));

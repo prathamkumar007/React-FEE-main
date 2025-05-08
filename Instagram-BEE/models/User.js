@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema({
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, {timestamps: true});
 
-// Add method to check if a user is following another user
 userSchema.methods.isFollowing = function(userId) {
     return this.following.includes(userId);
 };

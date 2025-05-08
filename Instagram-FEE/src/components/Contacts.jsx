@@ -9,14 +9,12 @@ function Contacts({ role = 'guest' }){
         },
       ];
 
-    // Only get username if user is logged in
     let uName = role !== 'guest' ? localStorage.getItem("cUser") : null;
 
     return(
         <div className={styles.contacts}>
             <div className={styles.username}>
                 {role === 'guest' ? (
-                    // Guest user view
                     <div className={styles["guest-view"]}>
                         <img src="/Images/user.png" alt="" />
                         <div className={styles["user-account"]}>
@@ -25,7 +23,6 @@ function Contacts({ role = 'guest' }){
                         </div>
                     </div>
                 ) : (
-                    // Logged in user view
                     <>
                         <img src="/Images/user.png" alt="" />
                         <div className={styles["user-account"]}>
@@ -35,7 +32,6 @@ function Contacts({ role = 'guest' }){
                     </>
                 )}
                 
-                {/* Login modal - only show for logged in users */}
                 {role !== 'guest' && (
                     <>
                         <div className={styles["modal-background"]} id="modalBackground"></div>
@@ -64,7 +60,6 @@ function Contacts({ role = 'guest' }){
                 )}
             </div>
 
-            {/* Only show suggestions for logged in users */}
             {role !== 'guest' && (
                 <>
                     <div className={styles.suggest}>

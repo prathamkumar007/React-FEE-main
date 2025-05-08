@@ -27,7 +27,6 @@ function ProfilePost({ profileEmail }) {
         if (currentUser) {
           setUserPrivacy(currentUser.privacy || 'public');
           if (currentUser.privacy === 'public') {
-            // Ensure uniqueness of post IDs
             const uniquePostIds = [...new Set(currentUser.myPost)].filter(Boolean);
             await fetchUserPosts(uniquePostIds);
           } else {

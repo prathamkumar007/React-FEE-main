@@ -84,13 +84,11 @@ function NavBar({ role = 'guest' }) {
 
     const handleLogout = (e) => {
         e.stopPropagation();
-        // Clear all auth data
         localStorage.removeItem("role");
         localStorage.removeItem("cUser");
         localStorage.removeItem("userId");
         localStorage.removeItem("token");
         
-        // Force reload to update all components
         window.location.href = '/login';
     };
 
@@ -108,7 +106,6 @@ function NavBar({ role = 'guest' }) {
         }
     }, [showMore]);
 
-    // Add scroll lock when dropdown is open
     useEffect(() => {
         if (showMore) {
             document.body.style.overflow = 'hidden';

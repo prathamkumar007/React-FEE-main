@@ -7,7 +7,7 @@
     margin-bottom: 2vw;
 }
 .navbar{
-    line-height: 1.5;
+    line-height: 1.8;
     width: 15%;
     height: 100vh;
     border-right: 1px solid rgba(128, 128, 128, 0.188);
@@ -109,8 +109,8 @@
     height: auto;
     display: none;
     position: fixed;
-    bottom: 10%;
-    left: 1%;
+    bottom: 21%;
+    left: 5%;
     background-color: white;
     box-shadow: 1px 1px 10px 2px rgb(0, 0, 0, 0.5);
     border-radius: 1vh;
@@ -148,7 +148,7 @@
 }
 
 .settings-link {
-    margin-top: auto;  /* This will push the settings link to the bottom */
+    margin-top: auto;
     padding-bottom: 20px;
 }
 
@@ -176,7 +176,7 @@
   }
 
   .admin-dashboard {
-    margin-left: 19%; /* Adjust margin to match navbar width at this breakpoint */
+    margin-left: 19%;
     width: 79%;
   }
 }
@@ -252,14 +252,14 @@
 
   .admin-dashboard {
     padding: 12px 5px;
-    margin: 70px 10px 60px 10px; /* Top margin to clear the fixed navbar, bottom margin to clear bottom nav */
-    width: calc(100% - 20px); /* Full width minus margins */
+    margin: 70px 10px 60px 10px;
+    width: calc(100% - 20px);
     border-radius: 6px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     background-color: white;
-    position: absolute; /* Position it absolutely */
-    left: 0; /* Reset left margin */
-    z-index: 50; /* Lower than navbar z-index */
+    position: absolute;
+    left: 0;
+    z-index: 50;
   }
 }
 
@@ -284,7 +284,7 @@
 
   .admin-dashboard {
     padding: 10px 3px;
-    margin: 65px 8px 55px 8px; /* Adjusted for smaller screens */
+    margin: 65px 8px 55px 8px;
     width: calc(100% - 16px);
   }
   
@@ -346,7 +346,6 @@
   }
 }
 
-/* Add margin to main content to prevent overlap with fixed navbar */
 .container {
     margin-left: 15%;
     width: 85%;

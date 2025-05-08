@@ -15,7 +15,6 @@ function UserDiscovery() {
         const fetchUsers = async () => {
             try {
                 const response = await API.get('/auth/users');
-                // Filter out current user and admin
                 const filteredUsers = response.data.filter(user => 
                     user.email !== currentUser && user.role !== 'admin'
                 );

@@ -7,7 +7,7 @@ import API from '../../utils/api';
 function Settings() {
     const [privacy, setPrivacy] = useState('public');
     const [loading, setLoading] = useState(true);
-    const [message, setMessage] = useState({ text: '', type: '' });  // Change message state to object
+    const [message, setMessage] = useState({ text: '', type: '' });
     const [role, setRole] = useState('user');
     const navigate = useNavigate();
 

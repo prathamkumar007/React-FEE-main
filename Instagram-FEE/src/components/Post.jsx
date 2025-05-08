@@ -21,9 +21,13 @@ function Post({ role }) {
     }
   }, []);
   
+  const showAlert = (message) => {
+    alert(message);
+  };
+
   const handleLike = (index) => {
     if (isGuest) {
-      alert("You must log in to like posts.");
+      showAlert("You must log in to like posts.");
       return;
     }
     const updatedPosts = [...posts];
@@ -33,6 +37,20 @@ function Post({ role }) {
       setPosts(updatedPosts);
     }
   }
+
+  const handleComment = (index) => {
+    if (isGuest) {
+      showAlert('Please login to comment on posts');
+      return;
+    }
+  };
+
+  const handleShare = (index) => {
+    if (isGuest) {
+      showAlert('Please login to share posts');
+      return;
+    }
+  };
 
   return (
     <div className="posts">
@@ -61,11 +79,11 @@ function Post({ role }) {
               <i className="far fa-heart"></i>
                 <p className="post-likes">{post.likes}</p>
               </button>
-              <button className="comment" disabled = {isGuest}>
+              <button className="comment" onClick={() => handleComment(index)} disabled = {isGuest}>
               <i className="far fa-comment" ></i>
                 <p className="post-likes">{post.comment.length}</p>
               </button>
-              <button className="share" disabled = {isGuest}>
+              <button className="share" onClick={() => handleShare(index)} disabled = {isGuest}>
               <i className="far fa-paper-plane"></i>
                 <p className="post-likes">{post.shares}</p>
               </button>
@@ -80,11 +98,11 @@ function Post({ role }) {
                 <img src="/Images/darkHeart.png" className="dark-img" />
                 <p className="post-likes">{post.likes}</p>
               </button>
-              <button className="comment">
+              <button className="comment" onClick={() => handleComment(index)}>
                 <img src="/Images/darkMessage.png" className="dark-img" />
                 <p className="post-likes">{post.comment.length  }</p>
               </button>
-              <button className="share">
+              <button className="share" onClick={() => handleShare(index)}>
                 <img src="/Images/darkShare.png" className="dark-img" />
                 <p className="post-likes">{post.shares}</p>
               </button>

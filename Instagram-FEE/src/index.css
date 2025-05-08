@@ -45,13 +45,13 @@ body,html{
   .stories {
     width: 100%;
     margin: 0;
-    padding-top: 60px; /* Space for fixed header */
+    padding-top: 60px;
   }
   
   .users-profile {
     width: 100%;
     margin: 0;
-    padding: 60px 0 50px; /* Space for header and bottom nav */
+    padding: 60px 0 50px;
   }
 }
 

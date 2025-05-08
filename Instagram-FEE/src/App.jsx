@@ -12,16 +12,23 @@ function App() {
 
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem('token');
       const userRole = localStorage.getItem('role');
+  
+      if (userRole === 'guest') {
+        setRole('guest');
+        setLoading(false);
+        return;
+      }
+
+      const token = localStorage.getItem('token');
       const cUser = localStorage.getItem('cUser');
 
-      if (!token || !cUser) {
+      if (!token || !cUser || !userRole) {
         navigate('/login');
         return;
       }
 
-      setRole(userRole || 'user');
+      setRole(userRole);
       setLoading(false);
     };
 

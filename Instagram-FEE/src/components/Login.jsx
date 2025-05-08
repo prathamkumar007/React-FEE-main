@@ -51,13 +51,11 @@ function Login() {
 
       const data = await response.json();
       if (response.ok) {
-        // Store all necessary user data
         localStorage.setItem("cUser", data.user.email);
         localStorage.setItem("role", data.user.role || 'user');
         localStorage.setItem("userId", data.user.id);
-        localStorage.setItem("token", data.token || 'dummy-token'); // Add this line
+        localStorage.setItem("token", data.token || 'dummy-token');
         
-        // Force a page reload to update all components
         window.location.href = '/home';
       } else {
         alert(data.message);
@@ -70,7 +68,11 @@ function Login() {
   const handleGuestLogin = (e) => {
     e.preventDefault();
     localStorage.setItem("role", "guest");
-    navigate("/");
+    localStorage.setItem("token", "guest-token");
+    localStorage.setItem("cUser", "guest");
+    localStorage.setItem("userId", "guest-user");
+    
+    navigate("/home");
   };
 
   return (

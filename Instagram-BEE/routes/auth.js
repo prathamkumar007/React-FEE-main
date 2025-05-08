@@ -259,12 +259,10 @@ router.post("/follow/:id", async (req, res) => {
             return res.status(400).json({ message: "Cannot follow yourself" });
         }
 
-        // Check if already following
         if (follower.following.includes(targetUserId)) {
             return res.status(400).json({ message: "Already following this user" });
         }
 
-        // Add to following/followers arrays
         follower.following.push(targetUserId);
         targetUser.followers.push(follower._id);
 
@@ -294,7 +292,6 @@ router.post("/unfollow/:id", async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Remove from following/followers arrays
         follower.following = follower.following.filter(
             id => id.toString() !== targetUserId
         );
